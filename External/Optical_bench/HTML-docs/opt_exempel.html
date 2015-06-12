@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of opt_exempel</title>
+  <meta name="keywords" content="opt_exempel">
+  <meta name="description" content="Example showing the capabilities of Optical_bench:">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>opt_exempel
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Example showing the capabilities of Optical_bench:</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Example showing the capabilities of Optical_bench:
+ Primarily the ray-tracing of an single lens imaging system and
+ its point-spread-function</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_build.html" class="code" title="function opt_elems = opt_build(file)">opt_build</a>	OPT_BUILD - Builds optical system specified in FILE</li><li><a href="opt_plotoptics.html" class="code" title="function Hs = opt_plotoptics(opt_el,plotmode)">opt_plotoptics</a>	OPT_PLOTOPTICS - Plot the optical system.</li><li><a href="opt_ray.html" class="code" title="function ray = opt_ray()">opt_ray</a>	OPT_RAY - RAY creator for OPT_TOOLS</li><li><a href="opt_screen.html" class="code" title="function [opt1] = opt_screen(opt_type,opt_args)">opt_screen</a>	OPT_SCREEN - Screen - imaging detector.</li><li><a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">opt_trace</a>	OPT_TRACE - ray tracing through optical systems.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Example showing the capabilities of Optical_bench:</span>
+0002 <span class="comment">% Primarily the ray-tracing of an single lens imaging system and</span>
+0003 <span class="comment">% its point-spread-function</span>
+0004 
+0005 <span class="comment">% Set the options for ploting of the optics/raytracing</span>
+0006 opt_ops.plotrays=1; <span class="comment">% plot the individual rays</span>
+0007 opt_ops.plotpaus=0; <span class="comment">% do not pause after each  ray intersection</span>
+0008 opt_ops.plotRT = 0; <span class="comment">% do not ``drawnow'' after each ray intersection</span>
+0009 
+0010 <span class="comment">% build the optical system as specified in opt.exmpl</span>
+0011 optelements = <a href="opt_build.html" class="code" title="function opt_elems = opt_build(file)">opt_build</a>(<span class="string">'opt.exmpl'</span>);
+0012 
+0013 <span class="comment">% make a default ray</span>
+0014 ray = <a href="opt_ray.html" class="code" title="function ray = opt_ray()">opt_ray</a>;
+0015 
+0016 <span class="comment">%make 100 paralell rays with random displacement in y-z plane</span>
+0017 nr_rays = 100;
+0018 <span class="keyword">for</span> ray_i = 1:nr_rays,
+0019   
+0020   rays(ray_i) = ray;
+0021   rays(ray_i).r = [-3 -1.5+3*rand -1.5+3*rand];
+0022   rays(ray_i).color = rand([3 1]); <span class="comment">% color is line color for</span>
+0023                                    <span class="comment">% plotting of rays</span>
+0024   
+0025 <span class="keyword">end</span>
+0026 
+0027 clf
+0028 subplot(2,2,1)
+0029 <span class="comment">% plot the optical system</span>
+0030 <a href="opt_plotoptics.html" class="code" title="function Hs = opt_plotoptics(opt_el,plotmode)">opt_plotoptics</a>(optelements([1:end-4 end]));
+0031 hold on
+0032 <span class="comment">% trace all rays</span>
+0033 [<a href="opt_screen.html" class="code" title="function [opt1] = opt_screen(opt_type,opt_args)">opt_screen</a>] = <a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">opt_trace</a>(optelements([1:end-4 end]),rays,opt_ops);
+0034 view(-15,75)
+0035 
+0036 subplot(2,2,2)
+0037 <span class="comment">% Last element should be a screen, which stores the image.</span>
+0038 imagesc(<a href="opt_screen.html" class="code" title="function [opt1] = opt_screen(opt_type,opt_args)">opt_screen</a>(end).img)
+0039 axis([245 265 245 265])
+0040 
+0041 subplot(2,2,3)
+0042 ray.r = [-3 -1 0];
+0043 <a href="opt_plotoptics.html" class="code" title="function Hs = opt_plotoptics(opt_el,plotmode)">opt_plotoptics</a>(optelements);
+0044 hold on
+0045 [<a href="opt_screen.html" class="code" title="function [opt1] = opt_screen(opt_type,opt_args)">opt_screen</a>] = <a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">opt_trace</a>(optelements,ray,opt_ops);
+0046 view(-15,75)
+0047 subplot(2,2,2)
+0048 subplot(2,2,4)
+0049 ray.r = [-3 0 0];
+0050 [<a href="opt_screen.html" class="code" title="function [opt1] = opt_screen(opt_type,opt_args)">opt_screen</a>] = <a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">opt_trace</a>(optelements([end-1 end]),ray,opt_ops);
+0051 view(0,90)</pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

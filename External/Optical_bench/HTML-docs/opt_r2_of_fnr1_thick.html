@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of opt_r2_of_fnr1_thick</title>
+  <meta name="keywords" content="opt_r2_of_fnr1_thick">
+  <meta name="description" content="r2 = opt_r2_of_fnr1_thick(f,n,r1,zc)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>opt_r2_of_fnr1_thick
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>r2 = opt_r2_of_fnr1_thick(f,n,r1,zc)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function r2 = opt_r2_of_fnr1_thick(f,n,r1,zc) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> r2 = opt_r2_of_fnr1_thick(f,n,r1,zc)
+ 
+ OPT_R2_OF_FNR1_THICK - second radii of curvature given F, N R1 and ZC, thick lens
+ F - focal width of the lens, N index of refraction of lens
+ material, R1 - radius of curvature of the front surface (or
+ -1*radius of curvature of the rear surface), ZC - centre
+ thickness of the lens</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_r2_of_fnr1_thin.html" class="code" title="function r2 = opt_r2_of_fnr1_thin(f,n,r1)">opt_r2_of_fnr1_thin</a>	OPT_R2_OF_FNR1_THIN - second radii of curvature given F, N and R1, thin lens</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_exempel6.html" class="code" title="">opt_exempel6</a>	Example showing Spherical abberation and Coma.</li><li><a href="opt_exmpl_astigmatic.html" class="code" title="">opt_exmpl_astigmatic</a>	Example showing astigmatic aberration</li><li><a href="opt_exmpl_coma.html" class="code" title="">opt_exmpl_coma</a>	Example showing coma (aberration)</li><li><a href="opt_exmpl_field_curv.html" class="code" title="">opt_exmpl_field_curv</a>	Example showing curvature of focus (aberration).</li><li><a href="opt_exmpl_sphere_coma.html" class="code" title="">opt_exmpl_sphere_coma</a>	Example showing spherical aberation and coma</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function r2 = opt_r2_of_fnr1_thick(f,n,r1,zc)</a>
+0002 <span class="comment">% r2 = opt_r2_of_fnr1_thick(f,n,r1,zc)</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% OPT_R2_OF_FNR1_THICK - second radii of curvature given F, N R1 and ZC, thick lens</span>
+0005 <span class="comment">% F - focal width of the lens, N index of refraction of lens</span>
+0006 <span class="comment">% material, R1 - radius of curvature of the front surface (or</span>
+0007 <span class="comment">% -1*radius of curvature of the rear surface), ZC - centre</span>
+0008 <span class="comment">% thickness of the lens</span>
+0009 
+0010 
+0011 fun = inline(<span class="string">'(n-1)*(1/r1-1/r2)+zc*(n-1)^2/n/r1/r2-1/f'</span>,<span class="string">'r2'</span>,<span class="string">'r1'</span>,<span class="string">'n'</span>,<span class="string">'f'</span>,<span class="string">'zc'</span>);
+0012 
+0013 r2 = <a href="opt_r2_of_fnr1_thin.html" class="code" title="function r2 = opt_r2_of_fnr1_thin(f,n,r1)">opt_r2_of_fnr1_thin</a>(f,n,r1);
+0014 r2 = fzero(fun,r2,[],r1,n,f,zc);</pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

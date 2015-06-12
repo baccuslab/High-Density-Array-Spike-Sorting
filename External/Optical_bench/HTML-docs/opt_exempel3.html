@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of opt_exempel3</title>
+  <meta name="keywords" content="opt_exempel3">
+  <meta name="description" content="Example of spherical aberation">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>opt_exempel3
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Example of spherical aberation</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Example of spherical aberation</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_build.html" class="code" title="function opt_elems = opt_build(file)">opt_build</a>	OPT_BUILD - Builds optical system specified in FILE</li><li><a href="opt_plotoptics.html" class="code" title="function Hs = opt_plotoptics(opt_el,plotmode)">opt_plotoptics</a>	OPT_PLOTOPTICS - Plot the optical system.</li><li><a href="opt_ray.html" class="code" title="function ray = opt_ray()">opt_ray</a>	OPT_RAY - RAY creator for OPT_TOOLS</li><li><a href="opt_screen.html" class="code" title="function [opt1] = opt_screen(opt_type,opt_args)">opt_screen</a>	OPT_SCREEN - Screen - imaging detector.</li><li><a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">opt_trace</a>	OPT_TRACE - ray tracing through optical systems.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="aberation_spherical.html" class="code" title="">aberation_spherical</a>	</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Example of spherical aberation</span>
+0002 
+0003 <span class="comment">% Set the options for ploting of the optics/raytracing</span>
+0004 opt_ops.plotrays=1; <span class="comment">% plot the individual rays</span>
+0005 opt_ops.plotpaus=0; <span class="comment">% do not pause after each  ray intersection</span>
+0006 opt_ops.plotRT = 0; <span class="comment">% do not ``drawnow'' after each ray intersection</span>
+0007 
+0008 <span class="comment">% build the optical system as specified in opt.exmpl</span>
+0009 optelements = <a href="opt_build.html" class="code" title="function opt_elems = opt_build(file)">opt_build</a>(<span class="string">'opt_single_lens2.exmpl'</span>);
+0010 
+0011 <span class="comment">% make a default ray</span>
+0012 ray = <a href="opt_ray.html" class="code" title="function ray = opt_ray()">opt_ray</a>;
+0013 
+0014 <span class="comment">%make 100 paralell rays with random displacement in y-z plane</span>
+0015 nr_rays = 18;
+0016 
+0017 clrs = jet(9);
+0018 
+0019 <span class="keyword">for</span> ray_i = 2:nr_rays,
+0020   
+0021   fi_of_i = atan(2/20-ray_i/100);
+0022   
+0023   rays(ray_i) = ray;
+0024   rays(ray_i).r = [-20 0 2-4*ray_i/20];
+0025   <span class="comment">%rays(ray_i).e = [cos(fi_of_i) 0 sin(fi_of_i)];</span>
+0026   rays(ray_i).e = [1 0 0];
+0027   rays(ray_i).color = clrs(abs(ray_i-10)+1,:); <span class="comment">% color is line color for</span>
+0028                                    <span class="comment">% plotting of rays</span>
+0029   
+0030 <span class="keyword">end</span>
+0031 
+0032 <span class="comment">%subplot(2,2,1)</span>
+0033 <span class="comment">% plot the optical system</span>
+0034 <a href="opt_plotoptics.html" class="code" title="function Hs = opt_plotoptics(opt_el,plotmode)">opt_plotoptics</a>(optelements);
+0035 hold on
+0036 <span class="comment">% trace all rays</span>
+0037 [<a href="opt_screen.html" class="code" title="function [opt1] = opt_screen(opt_type,opt_args)">opt_screen</a>] = <a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">opt_trace</a>(optelements,rays,opt_ops);
+0038 view(0,90)
+0039 
+0040 <span class="comment">% $$$ subplot(2,2,2)</span>
+0041 <span class="comment">% $$$ % Last element should be a screen, which stores the image.</span>
+0042 <span class="comment">% $$$ imagesc(opt_screen(end).img)</span>
+0043 <span class="comment">% $$$ axis([245 265 245 265])</span>
+0044 <span class="comment">% $$$</span>
+0045 <span class="comment">% $$$ subplot(2,2,3)</span>
+0046 <span class="comment">% $$$ ray.r = [-3 -1 0];</span>
+0047 <span class="comment">% $$$ opt_plotoptics(optelements);</span>
+0048 <span class="comment">% $$$ hold on</span>
+0049 <span class="comment">% $$$ [opt_screen] = opt_trace(optelements,ray,opt_ops);</span>
+0050 <span class="comment">% $$$ view(-15,75)</span></pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of opt_f_of_r1nr2zc</title>
+  <meta name="keywords" content="opt_f_of_r1nr2zc">
+  <meta name="description" content="OPT_R2_OF_FNR1_THICK - second radii of curvature given F, N R1 and ZC, thick lens">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>opt_f_of_r1nr2zc
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>OPT_R2_OF_FNR1_THICK - second radii of curvature given F, N R1 and ZC, thick lens</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function f = opt_f_of_r1nr2zc(r1,n,r2,zc) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> OPT_R2_OF_FNR1_THICK - second radii of curvature given F, N R1 and ZC, thick lens
+ F - focal width of the lens, N index of refraction of lens
+ material, R1 - radius of curvature of the front surface (or
+ -1*radius of curvature of the rear surface), ZC - centre
+ thickness of the lens
+ 
+ Calling:
+ f = opt_f_of_r1nr2zc(f,n,r1,zc)
+ 
+ Formula from Hecht, Optics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_exempel6.html" class="code" title="">opt_exempel6</a>	Example showing Spherical abberation and Coma.</li><li><a href="opt_exmpl_astigmatic.html" class="code" title="">opt_exmpl_astigmatic</a>	Example showing astigmatic aberration</li><li><a href="opt_exmpl_coma.html" class="code" title="">opt_exmpl_coma</a>	Example showing coma (aberration)</li><li><a href="opt_exmpl_field_curv.html" class="code" title="">opt_exmpl_field_curv</a>	Example showing curvature of focus (aberration).</li><li><a href="opt_exmpl_sphere_coma.html" class="code" title="">opt_exmpl_sphere_coma</a>	Example showing spherical aberation and coma</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function f = opt_f_of_r1nr2zc(r1,n,r2,zc)</a>
+0002 <span class="comment">% OPT_R2_OF_FNR1_THICK - second radii of curvature given F, N R1 and ZC, thick lens</span>
+0003 <span class="comment">% F - focal width of the lens, N index of refraction of lens</span>
+0004 <span class="comment">% material, R1 - radius of curvature of the front surface (or</span>
+0005 <span class="comment">% -1*radius of curvature of the rear surface), ZC - centre</span>
+0006 <span class="comment">% thickness of the lens</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Calling:</span>
+0009 <span class="comment">% f = opt_f_of_r1nr2zc(f,n,r1,zc)</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Formula from Hecht, Optics</span>
+0012 
+0013 <span class="comment">% Copyright B. Gustavsson</span>
+0014 
+0015 f = 1./((n-1)*(1/r1-1/r2)+zc*(n-1)^2/n/r1/r2);</pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

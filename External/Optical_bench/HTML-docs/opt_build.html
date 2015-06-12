@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of opt_build</title>
+  <meta name="keywords" content="opt_build">
+  <meta name="description" content="OPT_BUILD - Builds optical system specified in FILE">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>opt_build
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>OPT_BUILD - Builds optical system specified in FILE</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function opt_elems = opt_build(file) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> OPT_BUILD - Builds optical system specified in FILE
+ 
+ Calling:
+ OPT_ELEMS = OPT_BUILD(FILE)
+ 
+ See also README OPT.EXMPL</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_aperture.html" class="code" title="function [opt1] = opt_aperture(opt_type,opt_args)">opt_aperture</a>	OPT_APERTURE Circular aperture, iris</li><li><a href="opt_build.html" class="code" title="function opt_elems = opt_build(file)">opt_build</a>	OPT_BUILD - Builds optical system specified in FILE</li><li><a href="opt_elem.html" class="code" title="function opt_elem = opt_elem(type)">opt_elem</a>	OPT_ELEM - Default opt_elem structure</li><li><a href="opt_fcn.html" class="code" title="function [opt1] = opt_fcn(opt_type,opt_args)">opt_fcn</a>	OPT_FCN optical surface with general shape</li><li><a href="opt_grid.html" class="code" title="function [opt1] = opt_grid(opt_type,opt_args)">opt_grid</a>	OPT_GRID - Simple difractive grating</li><li><a href="opt_lens.html" class="code" title="function [opt] = opt_lens(opt_type,opt_spec)">opt_lens</a>	OPT_LENS - Spherical lens single glass.</li><li><a href="opt_prism.html" class="code" title="function [opt] = opt_prism(opt_type,opt_spec)">opt_prism</a>	OPT_LENS - Spherical lens single glass.</li><li><a href="opt_screen.html" class="code" title="function [opt1] = opt_screen(opt_type,opt_args)">opt_screen</a>	OPT_SCREEN - Screen - imaging detector.</li><li><a href="opt_slit.html" class="code" title="function [opt1] = opt_slit(opt_type,opt_args)">opt_slit</a>	OPT_SLIT - optical slit.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_build.html" class="code" title="function opt_elems = opt_build(file)">opt_build</a>	OPT_BUILD - Builds optical system specified in FILE</li><li><a href="opt_exempel.html" class="code" title="">opt_exempel</a>	Example showing the capabilities of Optical_bench:</li><li><a href="opt_exempel2.html" class="code" title="">opt_exempel2</a>	Example of</li><li><a href="opt_exempel3.html" class="code" title="">opt_exempel3</a>	Example of spherical aberation</li><li><a href="opt_exempel5.html" class="code" title="">opt_exempel5</a>	Example of Spherical abberation</li><li><a href="opt_exempel6.html" class="code" title="">opt_exempel6</a>	Example showing Spherical abberation and Coma.</li><li><a href="opt_exmpl_astigmatic.html" class="code" title="">opt_exmpl_astigmatic</a>	Example showing astigmatic aberration</li><li><a href="opt_exmpl_chromatic_ab.html" class="code" title="">opt_exmpl_chromatic_ab</a>	Example showing chromatic aberration</li><li><a href="opt_exmpl_coma.html" class="code" title="">opt_exmpl_coma</a>	Example showing coma (aberration)</li><li><a href="opt_exmpl_field_curv.html" class="code" title="">opt_exmpl_field_curv</a>	Example showing curvature of focus (aberration).</li><li><a href="opt_exmpl_sphere_coma.html" class="code" title="">opt_exmpl_sphere_coma</a>	Example showing spherical aberation and coma</li><li><a href="opt_pinhole1.html" class="code" title="">opt_pinhole1</a>	Example showing pin-hole optics.</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function opt_elems = opt_build(file)</a>
+0002 <span class="comment">% OPT_BUILD - Builds optical system specified in FILE</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Calling:</span>
+0005 <span class="comment">% OPT_ELEMS = OPT_BUILD(FILE)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% See also README OPT.EXMPL</span>
+0008 
+0009 <span class="comment">% Version: 1.0</span>
+0010 <span class="comment">% Copyright: Bjorn Gustavsson 20020430</span>
+0011 
+0012 fp = fopen(file,<span class="string">'r'</span>);
+0013 
+0014 <span class="keyword">if</span> fp == -1
+0015   
+0016   error([<span class="string">'Error, could not open file: '</span>,file])
+0017   
+0018 <span class="keyword">end</span>
+0019 
+0020 curr_line = fgetl(fp);
+0021 curr_type = strtok(curr_line(10:end));
+0022 curr_line = fgetl(fp);
+0023 
+0024 <span class="keyword">while</span> ~feof(fp) &amp; ~strcmp(curr_type,<span class="string">'end'</span>)
+0025   
+0026   opt_args = <span class="string">''</span>;
+0027   <span class="comment">% Each optical element starts with ``#type''</span>
+0028   <span class="comment">% Read all parameters specifying that optical</span>
+0029   <span class="comment">% element.</span>
+0030   <span class="keyword">while</span> ~strcmp(curr_line(1:5),<span class="string">'#type'</span>) &amp; ~strcmp(curr_type,<span class="string">'end'</span>)
+0031     
+0032     opt_args = str2mat(opt_args,curr_line);
+0033     curr_line = fgetl(fp);
+0034     
+0035   <span class="keyword">end</span>
+0036   <span class="comment">%opt_args</span>
+0037   <span class="comment">% Build the current optical element.</span>
+0038   <span class="keyword">switch</span> curr_type
+0039    <span class="keyword">case</span> <span class="string">'file'</span>
+0040     <a href="opt_elem.html" class="code" title="function opt_elem = opt_elem(type)">opt_elem</a> = <a href="opt_build.html" class="code" title="function opt_elems = opt_build(file)">opt_build</a>(deblank(fliplr(deblank(fliplr(opt_args(<span class="keyword">end</span>,10:end))))));
+0041     <span class="comment">%curr_type</span>
+0042    <span class="keyword">case</span> <span class="string">'aperture'</span>
+0043     <a href="opt_elem.html" class="code" title="function opt_elem = opt_elem(type)">opt_elem</a> = <a href="opt_aperture.html" class="code" title="function [opt1] = opt_aperture(opt_type,opt_args)">opt_aperture</a>(curr_type,opt_args);
+0044    <span class="keyword">case</span> <span class="string">'grid'</span>
+0045     <a href="opt_elem.html" class="code" title="function opt_elem = opt_elem(type)">opt_elem</a> = <a href="opt_grid.html" class="code" title="function [opt1] = opt_grid(opt_type,opt_args)">opt_grid</a>(curr_type,opt_args);
+0046    <span class="keyword">case</span> <span class="string">'lens'</span>
+0047     <a href="opt_elem.html" class="code" title="function opt_elem = opt_elem(type)">opt_elem</a> = <a href="opt_lens.html" class="code" title="function [opt] = opt_lens(opt_type,opt_spec)">opt_lens</a>(curr_type,opt_args);
+0048    <span class="keyword">case</span> <span class="string">'prism'</span>
+0049     <a href="opt_elem.html" class="code" title="function opt_elem = opt_elem(type)">opt_elem</a> = <a href="opt_prism.html" class="code" title="function [opt] = opt_prism(opt_type,opt_spec)">opt_prism</a>(curr_type,opt_args);
+0050    <span class="keyword">case</span> <span class="string">'screen'</span>
+0051     <a href="opt_elem.html" class="code" title="function opt_elem = opt_elem(type)">opt_elem</a> = <a href="opt_screen.html" class="code" title="function [opt1] = opt_screen(opt_type,opt_args)">opt_screen</a>(curr_type,opt_args);
+0052    <span class="keyword">case</span> <span class="string">'slit'</span>
+0053     <a href="opt_elem.html" class="code" title="function opt_elem = opt_elem(type)">opt_elem</a> = <a href="opt_slit.html" class="code" title="function [opt1] = opt_slit(opt_type,opt_args)">opt_slit</a>(curr_type,opt_args);
+0054    <span class="keyword">otherwise</span>
+0055     <span class="comment">%curr_type</span>
+0056     <span class="comment">%opt_args</span>
+0057     <a href="opt_elem.html" class="code" title="function opt_elem = opt_elem(type)">opt_elem</a> = <a href="opt_fcn.html" class="code" title="function [opt1] = opt_fcn(opt_type,opt_args)">opt_fcn</a>(curr_type,opt_args);
+0058   <span class="keyword">end</span>
+0059   <span class="comment">%keyboard</span>
+0060   <span class="keyword">if</span> ~exist(<span class="string">'opt_elems'</span>,<span class="string">'var'</span>)
+0061     
+0062     opt_elems = [<a href="opt_elem.html" class="code" title="function opt_elem = opt_elem(type)">opt_elem</a>];
+0063     
+0064   <span class="keyword">else</span>
+0065     
+0066     opt_elems = [opt_elems <a href="opt_elem.html" class="code" title="function opt_elem = opt_elem(type)">opt_elem</a>];
+0067     
+0068   <span class="keyword">end</span>
+0069   curr_type = strtok(curr_line(10:end));
+0070   curr_line = fgetl(fp);
+0071   <span class="comment">%curr_type</span>
+0072   <span class="comment">%curr_line</span>
+0073 <span class="keyword">end</span>
+0074 
+0075 fclose(fp);</pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

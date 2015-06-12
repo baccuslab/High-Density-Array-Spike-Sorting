@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of opt_r2_of_fnr1_thin</title>
+  <meta name="keywords" content="opt_r2_of_fnr1_thin">
+  <meta name="description" content="OPT_R2_OF_FNR1_THIN - second radii of curvature given F, N and R1, thin lens">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>opt_r2_of_fnr1_thin
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>OPT_R2_OF_FNR1_THIN - second radii of curvature given F, N and R1, thin lens</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function r2 = opt_r2_of_fnr1_thin(f,n,r1) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> OPT_R2_OF_FNR1_THIN - second radii of curvature given F, N and R1, thin lens
+ F - focal width of the lens, N index of refraction of lens
+ material, R1 - radius of curvature of the front surface (or
+ -1*radius of curvature of the rear surface)  
+
+ Calling:
+ r2 = opt_r2_of_fnr1_thin(f,n,r1)
+
+ Formula from Hecht, Optics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_r2_of_fnr1_thick.html" class="code" title="function r2 = opt_r2_of_fnr1_thick(f,n,r1,zc)">opt_r2_of_fnr1_thick</a>	r2 = opt_r2_of_fnr1_thick(f,n,r1,zc)</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function r2 = opt_r2_of_fnr1_thin(f,n,r1)</a>
+0002 <span class="comment">% OPT_R2_OF_FNR1_THIN - second radii of curvature given F, N and R1, thin lens</span>
+0003 <span class="comment">% F - focal width of the lens, N index of refraction of lens</span>
+0004 <span class="comment">% material, R1 - radius of curvature of the front surface (or</span>
+0005 <span class="comment">% -1*radius of curvature of the rear surface)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Calling:</span>
+0008 <span class="comment">% r2 = opt_r2_of_fnr1_thin(f,n,r1)</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Formula from Hecht, Optics</span>
+0011 
+0012 <span class="comment">% Copyright B. Gustavsson</span>
+0013 
+0014 r2 = (1./r1-1./(n-1)./f).^-1;</pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

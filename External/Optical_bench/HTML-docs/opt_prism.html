@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of opt_prism</title>
+  <meta name="keywords" content="opt_prism">
+  <meta name="description" content="OPT_LENS - Spherical lens single glass.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>opt_prism
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>OPT_LENS - Spherical lens single glass.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [opt] = opt_prism(opt_type,opt_spec) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> OPT_LENS - Spherical lens single glass.
+ OPT_TYPE should be 'prism' (hm good and vital argument), OPT_SPEC
+ should be a string matrix, see README_OPT for specification.
+   Necessary specification fields: 
+ r1, r2, normal1, normal2, dxdydx, glass
+ glass should be name of the glass type, the other 1x3 array
+   Optional specification fields:
+ arc, arc1 arc2
+ example OPT_SPEC:
+ 'normal1     1 0 0'
+ 'normal2     cos(30*pi/180) sin(30*pi/180) 0'
+ 'r1          12 0 0'
+ 'r2          12.5 0 0'
+ 'dxdydz1     0 1.5 1.5'
+ 'dxdydz2     0 1.7321 1.5'
+ 'glass       bk7'
+ 'arc         .5'
+ 
+ Calling:
+ [opt] = opt_prism(opt_type,opt_spec)
+
+ See also <a href="opt_aperture.html" class="code" title="function [opt1] = opt_aperture(opt_type,opt_args)">OPT_APERTURE</a>, <a href="opt_grid.html" class="code" title="function [opt1] = opt_grid(opt_type,opt_args)">OPT_GRID</a>, <a href="opt_lens.html" class="code" title="function [opt] = opt_lens(opt_type,opt_spec)">OPT_LENS</a>, <a href="opt_screen.html" class="code" title="function [opt1] = opt_screen(opt_type,opt_args)">OPT_SCREEN</a>, <a href="opt_slit.html" class="code" title="function [opt1] = opt_slit(opt_type,opt_args)">OPT_SLIT</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_elem.html" class="code" title="function opt_elem = opt_elem(type)">opt_elem</a>	OPT_ELEM - Default opt_elem structure</li><li><a href="opt_findstr.html" class="code" title="function [jj] = opt_findstr(H,s)">opt_findstr</a>	OPT_FINDSTR - find string S in character array H,</li><li><a href="opt_prism.html" class="code" title="function [opt] = opt_prism(opt_type,opt_spec)">opt_prism</a>	OPT_LENS - Spherical lens single glass.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_build.html" class="code" title="function opt_elems = opt_build(file)">opt_build</a>	OPT_BUILD - Builds optical system specified in FILE</li><li><a href="opt_prism.html" class="code" title="function [opt] = opt_prism(opt_type,opt_spec)">opt_prism</a>	OPT_LENS - Spherical lens single glass.</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [opt] = opt_prism(opt_type,opt_spec)</a>
+0002 <span class="comment">% OPT_LENS - Spherical lens single glass.</span>
+0003 <span class="comment">% OPT_TYPE should be 'prism' (hm good and vital argument), OPT_SPEC</span>
+0004 <span class="comment">% should be a string matrix, see README_OPT for specification.</span>
+0005 <span class="comment">%   Necessary specification fields:</span>
+0006 <span class="comment">% r1, r2, normal1, normal2, dxdydx, glass</span>
+0007 <span class="comment">% glass should be name of the glass type, the other 1x3 array</span>
+0008 <span class="comment">%   Optional specification fields:</span>
+0009 <span class="comment">% arc, arc1 arc2</span>
+0010 <span class="comment">% example OPT_SPEC:</span>
+0011 <span class="comment">% 'normal1     1 0 0'</span>
+0012 <span class="comment">% 'normal2     cos(30*pi/180) sin(30*pi/180) 0'</span>
+0013 <span class="comment">% 'r1          12 0 0'</span>
+0014 <span class="comment">% 'r2          12.5 0 0'</span>
+0015 <span class="comment">% 'dxdydz1     0 1.5 1.5'</span>
+0016 <span class="comment">% 'dxdydz2     0 1.7321 1.5'</span>
+0017 <span class="comment">% 'glass       bk7'</span>
+0018 <span class="comment">% 'arc         .5'</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Calling:</span>
+0021 <span class="comment">% [opt] = opt_prism(opt_type,opt_spec)</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% See also OPT_APERTURE, OPT_GRID, OPT_LENS, OPT_SCREEN, OPT_SLIT</span>
+0024 
+0025 <span class="comment">% Version: 1.0</span>
+0026 <span class="comment">% Copyright: Bjorn Gustavsson 20020430</span>
+0027 
+0028 
+0029 <span class="keyword">if</span> nargin ~= 2,
+0030   help <a href="opt_prism.html" class="code" title="function [opt] = opt_prism(opt_type,opt_spec)">opt_prism</a>;
+0031   ok = 0;
+0032   <span class="keyword">return</span>;
+0033 <span class="keyword">end</span>;
+0034 
+0035   
+0036 opt1 = <a href="opt_elem.html" class="code" title="function opt_elem = opt_elem(type)">opt_elem</a>(opt_type);
+0037 opt2 = <a href="opt_elem.html" class="code" title="function opt_elem = opt_elem(type)">opt_elem</a>(opt_type);
+0038 
+0039 <span class="comment">% defaults</span>
+0040 opt2.glass = <span class="string">'air'</span>; <span class="comment">% going out into air after the prism</span>
+0041 opt1.r(2:3) = 0; <span class="comment">% Prism centered on the optical axis</span>
+0042 opt1.n = [1 0 0]; <span class="comment">% Prism perpendicular to the optical axis</span>
+0043 opt2.r(2:3) = 0; <span class="comment">% Prism centered on the optical axis</span>
+0044 opt2.n = [1 0 0]; <span class="comment">% Prism perpendicular to the optical axis</span>
+0045 opt1.arc = 0; <span class="comment">% no anti reflection coating</span>
+0046 opt2.arc = 0; <span class="comment">% no anti reflection coating</span>
+0047 
+0048 <span class="comment">% set the necessary ones:</span>
+0049 <span class="comment">% prism size</span>
+0050 ii = <a href="opt_findstr.html" class="code" title="function [jj] = opt_findstr(H,s)">opt_findstr</a>(opt_spec,<span class="string">'dydz1'</span>);
+0051 opt1.dxdydz = str2num(opt_spec(ii,12:end));
+0052 ii = <a href="opt_findstr.html" class="code" title="function [jj] = opt_findstr(H,s)">opt_findstr</a>(opt_spec,<span class="string">'dydz2'</span>);
+0053 opt2.dxdydz = str2num(opt_spec(ii,12:end));
+0054 <span class="comment">% prism position</span>
+0055 ii = <a href="opt_findstr.html" class="code" title="function [jj] = opt_findstr(H,s)">opt_findstr</a>(opt_spec,<span class="string">'r1'</span>);
+0056 opt1.r = str2num(opt_spec(ii,12:end));
+0057 ii = <a href="opt_findstr.html" class="code" title="function [jj] = opt_findstr(H,s)">opt_findstr</a>(opt_spec,<span class="string">'r2'</span>);
+0058 opt2.r = str2num(opt_spec(ii,12:end));
+0059 <span class="comment">% prism normal1</span>
+0060 ii = <a href="opt_findstr.html" class="code" title="function [jj] = opt_findstr(H,s)">opt_findstr</a>(opt_spec,<span class="string">'normal1'</span>);
+0061 opt1.n = str2num(opt_spec(ii,12:end));
+0062 <span class="comment">% prism normal2</span>
+0063 ii = <a href="opt_findstr.html" class="code" title="function [jj] = opt_findstr(H,s)">opt_findstr</a>(opt_spec,<span class="string">'normal2'</span>);
+0064 opt2.n = str2num(opt_spec(ii,12:end));
+0065 <span class="comment">% prism glass</span>
+0066 ii = <a href="opt_findstr.html" class="code" title="function [jj] = opt_findstr(H,s)">opt_findstr</a>(opt_spec,<span class="string">'glass'</span>);
+0067 opt1.glass = strtok(opt_spec(ii,12:end));
+0068 
+0069 <span class="comment">% set the optional ones</span>
+0070 ii = <a href="opt_findstr.html" class="code" title="function [jj] = opt_findstr(H,s)">opt_findstr</a>(opt_spec,<span class="string">'arc'</span>);
+0071 <span class="keyword">if</span> length(ii) == 1
+0072   
+0073   opt1.arc = str2num(opt_spec(ii,12:end));
+0074   opt2.arc = str2num(opt_spec(ii,12:end));
+0075   
+0076 <span class="keyword">elseif</span> length(ii)&gt;1
+0077   
+0078   ii = <a href="opt_findstr.html" class="code" title="function [jj] = opt_findstr(H,s)">opt_findstr</a>(opt_spec,<span class="string">'arc1'</span>);
+0079   opt1.arc = str2num(opt_spec(ii,12:end));
+0080   ii = <a href="opt_findstr.html" class="code" title="function [jj] = opt_findstr(H,s)">opt_findstr</a>(opt_spec,<span class="string">'arc2'</span>);
+0081   opt2.arc = str2num(opt_spec(ii,12:end));
+0082   
+0083 <span class="keyword">end</span>
+0084 
+0085 opt = [opt1 opt2];</pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

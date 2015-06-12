@@ -1,0 +1,291 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of opt_refraction</title>
+  <meta name="keywords" content="opt_refraction">
+  <meta name="description" content="OPT_REFRACTION - calculation of optical refraction - Snells law.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>opt_refraction
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>OPT_REFRACTION - calculation of optical refraction - Snells law.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [en,refraction_loss,n_refr,phase_shift] = opt_refraction(r_int,ray,optelem) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> OPT_REFRACTION - calculation of optical refraction - Snells law.
+   In addition it calculates the fraction of light lost in
+   reflection.
+   
+ Calling
+ [en,refraction_loss,n_refr,phase_shift] = opt_refraction(r_int,ray,optelem)
+ 
+ See also <a href="opt_intersection.html" class="code" title="function rinter = opt_intersection(optelem,rayin)">OPT_INTERSECTION</a>, <a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">OPT_TRACE</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_refrindx.html" class="code" title="function n = opt_refrindx(glass,wavelength)">opt_refrindx</a>	OPT_REFRINDX refractive index calculations.</li><li><a href="opt_rot.html" class="code" title="function out_v = opt_rot(in_v,rot_v,theta)">opt_rot</a>	OPT_ROT - rotate vector IN_V THEDA radians around ROT_V</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">opt_trace</a>	OPT_TRACE - ray tracing through optical systems.</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [en,refraction_loss,n_refr,phase_shift] = opt_refraction(r_int,ray,optelem)</a>
+0002 <span class="comment">% OPT_REFRACTION - calculation of optical refraction - Snells law.</span>
+0003 <span class="comment">%   In addition it calculates the fraction of light lost in</span>
+0004 <span class="comment">%   reflection.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Calling</span>
+0007 <span class="comment">% [en,refraction_loss,n_refr,phase_shift] = opt_refraction(r_int,ray,optelem)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% See also OPT_INTERSECTION, OPT_TRACE</span>
+0010 
+0011 <span class="comment">% Version: 1.0</span>
+0012 <span class="comment">% Copyright: Bjorn Gustavsson 20020430</span>
+0013 
+0014 n_refr = 1;
+0015 en = ray.e;
+0016 refraction_loss = 0;
+0017 phase_shift = 0;
+0018 fi_out = [];
+0019 
+0020 <span class="keyword">switch</span> optelem.type
+0021   
+0022  <span class="keyword">case</span> <span class="string">'aperture'</span>
+0023   r_int = r_int+ ray.e*( ( dot(optelem.r,optelem.n) - dot(r_int,optelem.n) ) / dot(ray.e,optelem.n) );
+0024   dr = r_int-optelem.r;
+0025   <span class="comment">% when falling outside the aperture opening take it away!</span>
+0026   <span class="keyword">if</span> norm(dr)&gt;optelem.diameter/2
+0027     en = 0*en;
+0028     refraction_loss = 1;
+0029   <span class="keyword">end</span>
+0030   
+0031  <span class="keyword">case</span> <span class="string">'grid'</span>
+0032   
+0033   r_int = r_int+ ( ( dot(optelem.r,optelem.n) - <span class="keyword">...</span>
+0034                dot(r_int,optelem.n) ) / <span class="keyword">...</span>
+0035              dot(ray.e,optelem.n) );
+0036   m = 0;
+0037   n_vec = optelem.n;
+0038   n_vec = n_vec*sign(n_vec(1));
+0039   theta_in = asin(norm(cross(ray.e,n_vec)));
+0040   theta_out = [];
+0041   <span class="comment">% Split the input ray to the main maximas.</span>
+0042   <span class="keyword">while</span> ( abs( sin(theta_in) - m*ray.wavelength*1000*optelem.lpmm ) &lt; 1 )
+0043     
+0044     theta_out = [theta_out,asin( sin(theta_in) - m*ray.wavelength*(1000*optelem.lpmm) )];
+0045     m = m+1;
+0046     
+0047   <span class="keyword">end</span>
+0048   m = -1;
+0049   <span class="comment">% in both directions!</span>
+0050   <span class="keyword">while</span> ( abs( sin(theta_in) - m*ray.wavelength*1000*optelem.lpmm ) &lt; 1 )
+0051     
+0052     theta_out = [theta_out,asin( sin(theta_in) - m*ray.wavelength*1000*optelem.lpmm)];
+0053     m = m-1;
+0054     
+0055   <span class="keyword">end</span>
+0056   en = [];
+0057   <span class="keyword">for</span> i = 1:length(theta_out)
+0058     
+0059     dfi = theta_in-theta_out(i);
+0060     en = [en;<a href="opt_rot.html" class="code" title="function out_v = opt_rot(in_v,rot_v,theta)">opt_rot</a>(ray.e,optelem.e_slits,dfi)];
+0061     refractin_loss = 0;
+0062     
+0063   <span class="keyword">end</span>
+0064   
+0065  <span class="keyword">case</span> <span class="string">'lens'</span>
+0066   <span class="comment">% If r_o_curv == inf &lt;=&gt; n_inter == optelem.n</span>
+0067   coc = optelem.r+optelem.n*optelem.r_o_curv;
+0068   r = r_int-coc;
+0069   n_vec = r/norm(r);
+0070   n_vec = n_vec*sign(n_vec(1));
+0071   fi_in = asin(norm(cross(ray.e,n_vec)));
+0072   n_refr = <a href="opt_refrindx.html" class="code" title="function n = opt_refrindx(glass,wavelength)">opt_refrindx</a>(optelem.glass,ray.wavelength);
+0073   <span class="keyword">if</span> ray.n/n_refr*sin(fi_in) &lt; 1
+0074     
+0075     fi_in;
+0076     fi_out = asin(ray.n/n_refr*sin(fi_in));
+0077     dfi = fi_in-fi_out;
+0078     <span class="keyword">if</span> norm(cross(ray.e,n_vec))
+0079       en = <a href="opt_rot.html" class="code" title="function out_v = opt_rot(in_v,rot_v,theta)">opt_rot</a>(ray.e,cross(ray.e,n_vec),dfi);
+0080     <span class="keyword">end</span>
+0081     
+0082   <span class="keyword">end</span>
+0083   
+0084   <span class="keyword">if</span> ~isempty(fi_out)
+0085     <span class="keyword">if</span> fi_in+fi_out ~= 0
+0086       <span class="comment">% reflexion losses after refraction</span>
+0087       refraction_loss = (sin(dfi)^2/sin(fi_in+fi_out)^2+tan(dfi)^2/tan(fi_in+fi_out)^2)/2;
+0088       
+0089     <span class="keyword">else</span>
+0090       <span class="comment">% and after normal incidence</span>
+0091       refraction_loss = (n_refr - ray.n).^2./(n_refr + ray.n).^2;
+0092       
+0093     <span class="keyword">end</span>
+0094   <span class="keyword">else</span> <span class="comment">% total relection</span>
+0095     en = 0*en;
+0096     refraction_loss = 1;
+0097   <span class="keyword">end</span>
+0098   dr = r_int-optelem.r;
+0099   <span class="comment">% when falling outside the lens opening take it away!</span>
+0100   <span class="keyword">if</span> norm(dr)&gt;optelem.diameter/2
+0101     en = 0*en;
+0102     refraction_loss = 1;
+0103   <span class="keyword">end</span>
+0104   
+0105  <span class="keyword">case</span> <span class="string">'flens'</span>
+0106   <span class="comment">% Fresnell lens.</span>
+0107   
+0108   coc = optelem.r+optelem.n*optelem.r_o_curv;
+0109   r = r_int-coc;
+0110   n_vec = r/norm(r);
+0111   n_vec = n_vec*sign(n_vec(1));
+0112   fi_in = asin(norm(cross(ray.e,n_vec)));
+0113   n_refr = <a href="opt_refrindx.html" class="code" title="function n = opt_refrindx(glass,wavelength)">opt_refrindx</a>(optelem.glass,ray.wavelength);
+0114   <span class="keyword">if</span> ray.n/n_refr*sin(fi_in) &lt; 1
+0115     
+0116     fi_in;
+0117     fi_out = asin(ray.n/n_refr*sin(fi_in));
+0118     dfi = fi_in-fi_out;
+0119     <span class="keyword">if</span> norm(cross(ray.e,n_vec))
+0120       en = <a href="opt_rot.html" class="code" title="function out_v = opt_rot(in_v,rot_v,theta)">opt_rot</a>(ray.e,cross(ray.e,n_vec),dfi);
+0121     <span class="keyword">end</span>
+0122     
+0123   <span class="keyword">end</span>
+0124   
+0125   <span class="keyword">if</span> ~isempty(fi_out)
+0126     <span class="keyword">if</span> fi_in+fi_out ~= 0
+0127       <span class="comment">% reflexion losses after refraction</span>
+0128       refraction_loss = (sin(dfi)^2/sin(fi_in+fi_out)^2+tan(dfi)^2/tan(fi_in+fi_out)^2)/2;
+0129       
+0130     <span class="keyword">else</span>
+0131       <span class="comment">% and after normal incidence</span>
+0132       refraction_loss = (n_refr - ray.n).^2./(n_refr + ray.n).^2;
+0133       
+0134     <span class="keyword">end</span>
+0135   <span class="keyword">else</span> <span class="comment">% total relection</span>
+0136     en = 0*en;
+0137     refraction_loss = 1;
+0138   <span class="keyword">end</span>
+0139   dr = r_int-optelem.r;
+0140   <span class="comment">% when falling outside the lens opening take it away!</span>
+0141   <span class="keyword">if</span> norm(dr)&gt;optelem.diameter/2
+0142     en = 0*en;
+0143     refraction_loss = 1;
+0144   <span class="keyword">end</span>
+0145   
+0146  <span class="keyword">case</span> <span class="string">'prism'</span>
+0147   
+0148   r_int = r_int+ ray.e*( ( dot(optelem.r,optelem.n) - <span class="keyword">...</span>
+0149                dot(r_int,optelem.n) ) / <span class="keyword">...</span>
+0150              dot(ray.e,optelem.n) );
+0151   n_vec = optelem.n;
+0152   
+0153   n_vec = n_vec*sign(n_vec(1));
+0154   fi_in = asin(norm(cross(ray.e,n_vec)));
+0155   n_refr = <a href="opt_refrindx.html" class="code" title="function n = opt_refrindx(glass,wavelength)">opt_refrindx</a>(optelem.glass,ray.wavelength);
+0156   <span class="keyword">if</span> ray.n/n_refr*sin(fi_in) &lt; 1
+0157     
+0158     fi_out = asin(ray.n/n_refr*sin(fi_in));
+0159     dfi = fi_in-fi_out;
+0160     en = ray.e;
+0161     <span class="keyword">if</span> norm(cross(ray.e,n_vec))
+0162       en = <a href="opt_rot.html" class="code" title="function out_v = opt_rot(in_v,rot_v,theta)">opt_rot</a>(ray.e,cross(ray.e,n_vec),dfi);
+0163     <span class="keyword">end</span>
+0164     
+0165   <span class="keyword">end</span>
+0166   
+0167   <span class="keyword">if</span> ~isempty(fi_out)
+0168     <span class="keyword">if</span> fi_in+fi_out ~= 0
+0169       <span class="comment">% reflexion losses after refraction</span>
+0170       refraction_loss = (sin(dfi)^2/sin(fi_in+fi_out)^2+tan(dfi)^2/tan(fi_in+fi_out)^2)/2;
+0171       
+0172     <span class="keyword">else</span>
+0173       <span class="comment">% and after normal incidence</span>
+0174       refraction_loss = (n_refr - ray.n).^2./(n_refr + ray.n).^2;
+0175       
+0176     <span class="keyword">end</span>
+0177   <span class="keyword">else</span> <span class="comment">% total relection</span>
+0178     en = 0*en;
+0179     refraction_loss = 1;
+0180   <span class="keyword">end</span>
+0181   
+0182  <span class="keyword">case</span> <span class="string">'screen'</span>
+0183   
+0184   r_int = r_int+ ray.e*( ( dot(optelem.r,optelem.n) - dot(r_int,optelem.n) ) / dot(ray.e,optelem.n) );
+0185   <span class="keyword">if</span> ( r_int(2) &lt; optelem.r(2)-optelem.dxdydz(2)/2 | <span class="keyword">...</span>
+0186        r_int(2) &gt; optelem.r(2)+optelem.dxdydz(2)/2 | <span class="keyword">...</span>
+0187        r_int(3) &lt; optelem.r(3)-optelem.dxdydz(3)/2 | <span class="keyword">...</span>
+0188        r_int(3) &gt; optelem.r(3)+optelem.dxdydz(3)/2 )
+0189     en = ray.e;
+0190     refraction_loss = 0;
+0191   <span class="keyword">else</span>
+0192     en = ray.e;
+0193     refraction_loss = 1;
+0194   <span class="keyword">end</span>
+0195   
+0196  <span class="keyword">case</span> <span class="string">'slit'</span>
+0197   
+0198   r_int = r_int+ ray.e*( ( dot(optelem.r,optelem.n) - dot(r_int,optelem.n) ) / dot(ray.e,optelem.n) );
+0199   <span class="keyword">if</span> ( r_int(2) &lt; optelem.r(2)-optelem.dxdydz(2)/2 | <span class="keyword">...</span>
+0200        r_int(2) &gt; optelem.r(2)+optelem.dxdydz(2)/2 | <span class="keyword">...</span>
+0201        r_int(3) &lt; optelem.r(3)-optelem.dxdydz(3)/2 | <span class="keyword">...</span>
+0202        r_int(3) &gt; optelem.r(3)+optelem.dxdydz(3)/2 )
+0203     en = ray.e;
+0204     refraction_loss = 0;
+0205   <span class="keyword">else</span>
+0206     en = 0*ray.e;
+0207     refraction_loss = 1;
+0208   <span class="keyword">end</span>
+0209   
+0210  <span class="keyword">otherwise</span>
+0211   
+0212   <span class="comment">%fh = inline([optelem.type,'(r_int,s_or_n,arglist)'],'r_int','s_or_n','arglist');</span>
+0213   n_vec = optelem.fcn2(r_int,<span class="string">'n'</span>,optelem.arglist);
+0214   fi_in = asin(norm(cross(ray.e,n_vec)));
+0215   n_refr = <a href="opt_refrindx.html" class="code" title="function n = opt_refrindx(glass,wavelength)">opt_refrindx</a>(optelem.glass,ray.wavelength);
+0216   <span class="keyword">if</span> ray.n/n_refr*sin(fi_in) &lt; 1
+0217     
+0218     fi_in;
+0219     fi_out = asin(ray.n/n_refr*sin(fi_in));
+0220     dfi = fi_in-fi_out;
+0221     <span class="keyword">if</span> norm(cross(ray.e,n_vec))
+0222       en = <a href="opt_rot.html" class="code" title="function out_v = opt_rot(in_v,rot_v,theta)">opt_rot</a>(ray.e,cross(ray.e,n_vec),dfi);
+0223     <span class="keyword">end</span>
+0224     
+0225   <span class="keyword">end</span>
+0226   
+0227   <span class="keyword">if</span> ~isempty(fi_out)
+0228     <span class="keyword">if</span> fi_in+fi_out ~= 0
+0229       <span class="comment">% reflexion losses after refraction</span>
+0230       refraction_loss = (sin(dfi)^2/sin(fi_in+fi_out)^2+tan(dfi)^2/tan(fi_in+fi_out)^2)/2;
+0231       
+0232     <span class="keyword">else</span>
+0233       <span class="comment">% and after normal incidence</span>
+0234       refraction_loss = (n_refr - ray.n).^2./(n_refr + ray.n).^2;
+0235       
+0236     <span class="keyword">end</span>
+0237   <span class="keyword">else</span> <span class="comment">% total relection</span>
+0238     en = 0*en;
+0239     refraction_loss = 1;
+0240   <span class="keyword">end</span>
+0241   
+0242 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

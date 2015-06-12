@@ -1,0 +1,9 @@
+#type        lens
+curvature2  -12     
+curvature1  100000
+r_1          -.3 0 0
+r_2          .3 0 0 
+diameter    4      
+glass       bk7    
+arc         .5     
+#type       end

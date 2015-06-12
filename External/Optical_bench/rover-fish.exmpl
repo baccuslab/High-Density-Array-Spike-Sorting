@@ -1,0 +1,112 @@
+#type        lens
+curvature1  35
+curvature2  52.484    
+r_1          0 0 0
+r_2          7.650 0 0 
+diameter1    213
+diameter2    104.6
+glass       bk7    
+arc         .5     
+#type        lens
+curvature1   7.257
+curvature2   10.437    
+r_1          11.651 0 0
+r_2          18.5 0 0 
+diameter1    213
+diameter2    104.6
+glass       bk7    
+arc         .5     
+#type        lens
+curvature1   5.339
+curvature2   5.203   
+r_1          20.75 0 0
+r_2          25.681 0 0 
+diameter1    213
+diameter2    104.6
+glass       bk7    
+arc         .5     
+#type        lens
+curvature1  35
+curvature2  52.5    
+r_1          31.122 0 0
+r_2          31.249 0 0 
+diameter1    213
+diameter2    104.6
+glass       bk7    
+arc         .5     
+#type        lens
+curvature1  35
+curvature2  52.5    
+r_1          31.122 0 0
+r_2          31.249
+diameter1    213
+diameter2    104.6
+glass       bk7    
+arc         .5     
+#type        lens
+curvature1  35
+curvature2  52.5    
+r_1          
+r_2          
+diameter1    213
+diameter2    104.6
+glass       bk7    
+arc         .5     
+#type        lens
+curvature1  35
+curvature2  52.5    
+r_1          
+r_2          
+diameter1    213
+diameter2    104.6
+glass       bk7    
+arc         .5     
+#type       screen
+normal      1 0 0    
+r1          90 0 0   
+dxdydz      0 15 15
+imgres      512 512 
+#type       end
+
+cumsum(dr)
+            0
+       7.6508
+       11.651
+         18.5
+        20.75
+       25.681
+       31.122
+       31.249
+       32.249
+       34.249
+       34.503
+       36.503
+       42.718
+roc
+           35
+       52.484
+        7.257
+       10.437
+        5.339
+        5.203
+          Inf
+          Inf
+          Inf
+          Inf
+          Inf
+          Inf
+          Inf
+dol
+           45
+           36
+         14.4
+         14.4
+          9.6
+            8
+            8
+      0.67999
+           10
+           10
+         12.5
+         12.5
+       17.392

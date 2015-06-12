@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of opt_all_refrindx</title>
+  <meta name="keywords" content="opt_all_refrindx">
+  <meta name="description" content="OPT_REFRINDX refractive index calculations.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>opt_all_refrindx
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>OPT_REFRINDX refractive index calculations.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function n = opt_all_refrindx(wavelength) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> OPT_REFRINDX refractive index calculations.
+ GLASS - name of glass type, WAVELENGTH in meters.
+ Data from JML Optical Industries, Inc available at:
+   http://www.netacc.net/~jmlopt/transmission2.html
+   Or at:
+   http://www.jmlopt.com/level2/TechInfo/materialstable.aspx
+ and
+
+ Calling:
+ n = opt_refrindx(glass,wavelength)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function n = opt_all_refrindx(wavelength)</a>
+0002 <span class="comment">% OPT_REFRINDX refractive index calculations.</span>
+0003 <span class="comment">% GLASS - name of glass type, WAVELENGTH in meters.</span>
+0004 <span class="comment">% Data from JML Optical Industries, Inc available at:</span>
+0005 <span class="comment">%   http://www.netacc.net/~jmlopt/transmission2.html</span>
+0006 <span class="comment">%   Or at:</span>
+0007 <span class="comment">%   http://www.jmlopt.com/level2/TechInfo/materialstable.aspx</span>
+0008 <span class="comment">% and</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Calling:</span>
+0011 <span class="comment">% n = opt_refrindx(glass,wavelength)</span>
+0012 <span class="comment">%</span>
+0013 
+0014 <span class="comment">% Copyright B. Gustavsson 20050804</span>
+0015 
+0016 <span class="keyword">persistent</span> glass_names_sellmeier refr_consts_sellmeier
+0017 
+0018 qwe = <span class="string">''</span>;
+0019 fp = fopen(<span class="string">'Sellmeier.glass.refr'</span>,<span class="string">'r'</span>);
+0020 <span class="keyword">while</span> ~feof(fp)
+0021   qwe = str2mat(qwe,fgetl(fp));
+0022 <span class="keyword">end</span>
+0023 glass_names_sellmeier = qwe(3:<span class="keyword">end</span>,1:7);
+0024 refr_consts_sellmeier = str2num(qwe(3:<span class="keyword">end</span>,8:end));
+0025 
+0026 
+0027 lambda_ref = [5876 4861 6563]*1e-10;
+0028 
+0029 <span class="comment">%I = strmatch(glass,glass_names_sellmeier);</span>
+0030 <span class="comment">%if ~isempty(I)</span>
+0031 <span class="keyword">for</span> I = 1:length(glass_names_sellmeier)  
+0032   lambda = wavelength*1e6; <span class="comment">% change units to micrometer</span>
+0033   A = refr_consts_sellmeier(I,1:3);
+0034   B = refr_consts_sellmeier(I,4:6);
+0035   n(I,:) = sqrt(1+A(1)*lambda.^2./(lambda.^2-B(1)) + A(2)*lambda.^2./(lambda.^2-B(2))+A(3)*lambda.^2./(lambda.^2-B(3)));
+0036 <span class="keyword">end</span>
+0037 
+0038 glasses = {<span class="string">'air'</span>,<span class="string">'acrylic'</span>,<span class="string">'b270'</span>,<span class="string">'bak1'</span>,<span class="string">'bak2'</span>,<span class="string">'bak4'</span>,<span class="string">'balkn3'</span>, <span class="keyword">...</span>
+0039            <span class="string">'bk7'</span>,<span class="string">'f2'</span>,<span class="string">'f3'</span>,<span class="string">'f4'</span>,<span class="string">'fusedsilica'</span>,<span class="string">'k5'</span>,<span class="string">'k7'</span>,<span class="string">'lasfn9'</span>, <span class="keyword">...</span>
+0040            <span class="string">'lah71'</span>,<span class="string">'pyrex'</span>,<span class="string">'sapphire'</span>,<span class="string">'sf1'</span>,<span class="string">'sf2'</span>,<span class="string">'sf8'</span>,<span class="string">'sf10'</span>, <span class="keyword">...</span>
+0041            <span class="string">'sf11'</span>,<span class="string">'sf12'</span>,<span class="string">'sf15'</span>,<span class="string">'sf18'</span>,<span class="string">'sf19'</span>,<span class="string">'sf56'</span>,<span class="string">'sk3'</span>,<span class="string">'sk5'</span>, <span class="keyword">...</span>
+0042            <span class="string">'sk11'</span>,<span class="string">'sk16'</span>,<span class="string">'ssk2'</span>,<span class="string">'ssk4a'</span>,<span class="string">'ssk51'</span>,<span class="string">'zk5'</span>};
+0043 
+0044 <span class="keyword">for</span> i = 1:length(glasses)
+0045   glass = glasses{i};
+0046   <span class="keyword">switch</span> lower(glass)
+0047    <span class="keyword">case</span> <span class="string">'air'</span>
+0048     nref = [1 1 1];
+0049    <span class="keyword">case</span> <span class="string">'acrylic'</span>
+0050     nref = [1.491 1.496 1.488];
+0051    <span class="keyword">case</span> <span class="string">'b270'</span>
+0052     nref = [1.5230 1.5292 1.5202];
+0053    <span class="keyword">case</span> <span class="string">'bak1'</span>
+0054     nref = [1.5725 1.5794 1.5694];
+0055    <span class="keyword">case</span> <span class="string">'bak2'</span>
+0056     nref = [1.5399 1.5462 1.5372];
+0057    <span class="keyword">case</span> <span class="string">'bak4'</span>
+0058     nref = [1.56883 1.5759 1.56576];
+0059    <span class="keyword">case</span> <span class="string">'balkn3'</span>
+0060     nref = [1.51849 1.52447 1.51586];
+0061    <span class="keyword">case</span> <span class="string">'bk7'</span>
+0062     nref = [1.5168 1.5224 1.5143];
+0063    <span class="keyword">case</span> <span class="string">'f2'</span>
+0064     nref = [1.6200 1.6320 1.6150];
+0065    <span class="keyword">case</span> <span class="string">'f3'</span>
+0066     nref = [1.61293 1.62461 1.60806];
+0067    <span class="keyword">case</span> <span class="string">'f4'</span>
+0068     nref = [1.6165 1.6284 1.6116];
+0069    <span class="keyword">case</span> <span class="string">'fusedsilica'</span>
+0070     nref = [1.458 1.463 1.456];
+0071    <span class="keyword">case</span> <span class="string">'k5'</span>
+0072     nref = [1.5224 1.5285 1.5198];
+0073    <span class="keyword">case</span> <span class="string">'k7'</span>
+0074     nref = [1.51112 1.517 1.50854];
+0075    <span class="keyword">case</span> <span class="string">'lasfn9'</span>
+0076     nref = [1.850 1.8689 1.8425];
+0077    <span class="keyword">case</span> <span class="string">'lah71'</span>
+0078     nref = [1.8502 1.8689 1.8425];
+0079    <span class="keyword">case</span> <span class="string">'pyrex'</span>
+0080     nref = [1.473 1.478 1.471];
+0081    <span class="keyword">case</span> <span class="string">'sapphire'</span>
+0082     nref = [1.7682 1.7756 1.7649];
+0083    <span class="keyword">case</span> <span class="string">'sf1'</span>
+0084     nref = [1.71736 1.73462 1.71031];
+0085    <span class="keyword">case</span> <span class="string">'sf2'</span>
+0086     nref = [1.6476 1.6612 1.6421];
+0087    <span class="keyword">case</span> <span class="string">'sf5'</span>
+0088     nref = [1.6727 1.6875 1.66661];
+0089    <span class="keyword">case</span> <span class="string">'sf8'</span>
+0090     nref = [1.6889 1.7046 1.6825];
+0091    <span class="keyword">case</span> <span class="string">'sf10'</span>
+0092     nref = [1.72825 1.74648 1.72085];
+0093    <span class="keyword">case</span> <span class="string">'sf11'</span>
+0094     nref = [1.7847 1.8064 1.7759];
+0095    <span class="keyword">case</span> <span class="string">'sf12'</span>
+0096     nref = [1.64831 1.66187 1.64271];
+0097    <span class="keyword">case</span> <span class="string">'sf15'</span>
+0098     nref = [1.69895 1.71546 1.69221];
+0099    <span class="keyword">case</span> <span class="string">'sf18'</span>
+0100     nref = [1.7215 1.7390 1.7143];
+0101    <span class="keyword">case</span> <span class="string">'sf19'</span>
+0102     nref = [1.6668 1.6811 1.6609];
+0103    <span class="keyword">case</span> <span class="string">'sf56'</span>
+0104     nref = [1.7847 1.8061 1.7760];
+0105    <span class="keyword">case</span> <span class="string">'sk3'</span>
+0106     nref = [1.6088 1.6160 1.6056];
+0107    <span class="keyword">case</span> <span class="string">'sk5'</span>
+0108     nref = [1.5891 1.5958 1.5861];
+0109    <span class="keyword">case</span> <span class="string">'sk11'</span>
+0110     nref = [1.5638 1.5702 1.5610];
+0111    <span class="keyword">case</span> <span class="string">'sk16'</span>
+0112     nref = [1.6204 1.6275 1.6172];
+0113    <span class="keyword">case</span> <span class="string">'ssk2'</span>
+0114     nref = [1.6223 1.63048 1.61878];
+0115    <span class="keyword">case</span> <span class="string">'ssk4a'</span>
+0116     nref = [1.61765 1.62547 1.61427];
+0117    <span class="keyword">case</span> <span class="string">'ssk51'</span>
+0118     nref = [1.60361 1.61147 1.60022];
+0119    <span class="keyword">case</span> <span class="string">'zk5'</span>
+0120     nref = [1.53375 1.54049 1.53084];
+0121    <span class="keyword">otherwise</span>
+0122     lambda = [0 10000]*1e-9;
+0123     alpha = [0 0];
+0124     warning([<span class="string">'No values for glass absorption for: '</span>,glass])
+0125   <span class="keyword">end</span>
+0126   [abc,S,Mu] = polyfit(1./lambda_ref.^2,nref,2);
+0127   n(I+i,:) = polyval(abc,1./wavelength.^2,[],Mu);
+0128   
+0129 <span class="keyword">end</span>
+0130</pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

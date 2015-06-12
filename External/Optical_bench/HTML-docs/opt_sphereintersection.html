@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of opt_sphereintersection</title>
+  <meta name="keywords" content="opt_sphereintersection">
+  <meta name="description" content="OPT_SPHEREINTERSECTION - intersection between a ray and a spherical lens surface">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>opt_sphereintersection
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>OPT_SPHEREINTERSECTION - intersection between a ray and a spherical lens surface</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [rinter,en] = opt_sphereintersection(rl,e_in,rsf,curvature,lensradius,en) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> OPT_SPHEREINTERSECTION - intersection between a ray and a spherical lens surface 
+   
+ CALLING: 
+  [rinter,en] = opt_sphereintersection(rl,e_in,rsf,curvature,lensradius,en)
+ INPUT:</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="point_on_line.html" class="code" title="function  [r_out] = point_on_line(r_0,e_l,l);">point_on_line</a>	POINT_ON_LINE  - calculates the vector to a point</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_plotoptics.html" class="code" title="function Hs = opt_plotoptics(opt_el,plotmode)">opt_plotoptics</a>	OPT_PLOTOPTICS - Plot the optical system.</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [rinter,en] = opt_sphereintersection(rl,e_in,rsf,curvature,lensradius,en)</a>
+0002 <span class="comment">% OPT_SPHEREINTERSECTION - intersection between a ray and a spherical lens surface</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% CALLING:</span>
+0005 <span class="comment">%  [rinter,en] = opt_sphereintersection(rl,e_in,rsf,curvature,lensradius,en)</span>
+0006 <span class="comment">% INPUT:</span>
+0007 <span class="comment">%</span>
+0008 ex = e_in(1);
+0009 ey = e_in(2);
+0010 ez = e_in(3);
+0011 xl = rl(1);
+0012 yl = rl(2);
+0013 zl = rl(3);
+0014 x0 = rsf(1);
+0015 y0 = rsf(2);
+0016 z0 = rsf(3);
+0017 R = curvature;
+0018 
+0019 <span class="comment">% I'd like to say that I did this by myself...</span>
+0020 
+0021 l(2) = [ 1/2/(ex^2+ey^2+ez^2)*(2*ez*z0-2*zl*ez-2*yl*ey+2*ex*x0+2*ey*y0-2*xl*ex+2*(2*ex^2*zl*z0+2*ez*z0*ex*x0-ex^2*y0^2-ex^2*z0^2-ex^2*yl^2+ex^2*R^2-ex^2*zl^2-ey^2*xl^2-ey^2*z0^2-ey^2*x0^2+ey^2*R^2-ey^2*zl^2-ez^2*xl^2-ez^2*y0^2-ez^2*x0^2-ez^2*yl^2+ez^2*R^2+2*ex^2*yl*y0+2*ey^2*zl*z0+2*ey^2*xl*x0+2*ez^2*xl*x0+2*ez^2*yl*y0-2*ez*z0*yl*ey+2*ez*z0*ey*y0-2*ez*z0*xl*ex+2*zl*ez*yl*ey-2*zl*ez*ex*x0-2*zl*ez*ey*y0+2*zl*ez*xl*ex-2*yl*ey*ex*x0+2*yl*ey*xl*ex+2*ex*x0*ey*y0-2*ey*y0*xl*ex)^(1/2))];
+0022 
+0023 <span class="comment">% ...But who am I trying to fool</span>
+0024 
+0025 l(1) = [ 1/2/(ex^2+ey^2+ez^2)*(2*ez*z0-2*zl*ez-2*yl*ey+2*ex*x0+2*ey*y0-2*xl*ex-2*(2*ex^2*zl*z0+2*ez*z0*ex*x0-ex^2*y0^2-ex^2*z0^2-ex^2*yl^2+ex^2*R^2-ex^2*zl^2-ey^2*xl^2-ey^2*z0^2-ey^2*x0^2+ey^2*R^2-ey^2*zl^2-ez^2*xl^2-ez^2*y0^2-ez^2*x0^2-ez^2*yl^2+ez^2*R^2+2*ex^2*yl*y0+2*ey^2*zl*z0+2*ey^2*xl*x0+2*ez^2*xl*x0+2*ez^2*yl*y0-2*ez*z0*yl*ey+2*ez*z0*ey*y0-2*ez*z0*xl*ex+2*zl*ez*yl*ey-2*zl*ez*ex*x0-2*zl*ez*ey*y0+2*zl*ez*xl*ex-2*yl*ey*ex*x0+2*yl*ey*xl*ex+2*ex*x0*ey*y0-2*ey*y0*xl*ex)^(1/2))];
+0026 
+0027 <span class="comment">% Where would I be without the symbolic toolbox?</span>
+0028 
+0029 [qwe,ii] = min(abs(l));
+0030 l = l(ii);
+0031 
+0032 rinter = <a href="point_on_line.html" class="code" title="function  [r_out] = point_on_line(r_0,e_l,l);">point_on_line</a>(rl,e_in,l);
+0033 
+0034 r1 = rinter - rsf;
+0035 r2 = cross(r1,en);
+0036 
+0037 en = [];
+0038 <span class="keyword">if</span> norm(r2)&lt;lensradius
+0039   en = r1/norm(r1);
+0040 <span class="keyword">else</span>
+0041   rinter = [];
+0042 <span class="keyword">end</span>
+0043</pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

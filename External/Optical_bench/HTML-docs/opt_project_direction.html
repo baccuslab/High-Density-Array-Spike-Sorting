@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of opt_project_direction</title>
+  <meta name="keywords" content="opt_project_direction">
+  <meta name="description" content="OPT_PROJECT_POINT - Project light from direction E with intensity I throug OPT_EL">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>opt_project_direction
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>OPT_PROJECT_POINT - Project light from direction E with intensity I throug OPT_EL</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function opt_el = opt_project_direction(e,I,wavelengths,opt_el,opt_ops) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> OPT_PROJECT_POINT - Project light from direction E with intensity I throug OPT_EL 
+   
+ Calling:
+  opt_el = opt_project_direction(e,I,wavelengths,opt_el,opt_ops)
+ 
+ Input:
+   E - Direction [3x1] array.
+   I - light intensities [Nx1] array
+   WAVELENGTHS - light wavelength (nm)(m)
+   OPT_EL - optical system [Mx1] array of opt_elem
+   OPT_OPS - struct with options, see OPT_TYPICAL_OPS</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_ray.html" class="code" title="function ray = opt_ray()">opt_ray</a>	OPT_RAY - RAY creator for OPT_TOOLS</li><li><a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">opt_trace</a>	OPT_TRACE - ray tracing through optical systems.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_exempel6.html" class="code" title="">opt_exempel6</a>	Example showing Spherical abberation and Coma.</li><li><a href="opt_exmpl_astigmatic.html" class="code" title="">opt_exmpl_astigmatic</a>	Example showing astigmatic aberration</li><li><a href="opt_exmpl_sphere_coma.html" class="code" title="">opt_exmpl_sphere_coma</a>	Example showing spherical aberation and coma</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function opt_el = opt_project_direction(e,I,wavelengths,opt_el,opt_ops)</a>
+0002 <span class="comment">% OPT_PROJECT_POINT - Project light from direction E with intensity I throug OPT_EL</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Calling:</span>
+0005 <span class="comment">%  opt_el = opt_project_direction(e,I,wavelengths,opt_el,opt_ops)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Input:</span>
+0008 <span class="comment">%   E - Direction [3x1] array.</span>
+0009 <span class="comment">%   I - light intensities [Nx1] array</span>
+0010 <span class="comment">%   WAVELENGTHS - light wavelength (nm)(m)</span>
+0011 <span class="comment">%   OPT_EL - optical system [Mx1] array of opt_elem</span>
+0012 <span class="comment">%   OPT_OPS - struct with options, see OPT_TYPICAL_OPS</span>
+0013 
+0014 <span class="keyword">if</span> length(opt_el(1).diameter)
+0015   dl = -opt_el(1).diameter/2:opt_el(1).diameter/60:opt_el(1).diameter/2;
+0016 <span class="keyword">else</span>
+0017   dl = -max(opt_el(1).dxdydz)/2:max(opt_el(1).dxdydz)/60:max(opt_el(1).dxdydz)/2;
+0018 <span class="keyword">end</span>
+0019 
+0020 <span class="keyword">if</span> isfield(opt_ops,<span class="string">'test'</span>)
+0021   dl = linspace(min(dl),max(dl),opt_ops.test);
+0022 <span class="keyword">end</span>  
+0023 n = opt_el(1).n;
+0024 ey = [0 1 0];
+0025 rc = opt_el(1).r;
+0026 
+0027 <span class="keyword">if</span> dot(n,ey)&gt;1-100*eps
+0028   e1 = cross(n,ey);
+0029   e1 = e1/norm(e1);
+0030   e2 = cross(n,e1);
+0031 <span class="keyword">else</span>
+0032   e1 = cross(n,[0 0 1]);
+0033   e1 = e1/norm(e1);
+0034   e2 = cross(n,e1);
+0035 <span class="keyword">end</span>
+0036 
+0037 x1 = nan*zeros([length(dl) length(dl)]);
+0038 y1 = x1;
+0039 z1 = x1;
+0040 
+0041 <span class="keyword">for</span> li1 =1:length(dl),
+0042   <span class="keyword">for</span> li2 = 1:length(dl),
+0043     rinter = rc + e1*dl(li1) + e2*dl(li2);
+0044     x1(li2,li1) = rinter(1);
+0045     y1(li2,li1) = rinter(2);
+0046     z1(li2,li1) = rinter(3);
+0047   <span class="keyword">end</span>
+0048 <span class="keyword">end</span>
+0049 
+0050 
+0051 ray = <a href="opt_ray.html" class="code" title="function ray = opt_ray()">opt_ray</a>;
+0052 
+0053 rays(1:size(x1,1),1:size(x1,2)) = ray;
+0054 
+0055 <span class="keyword">for</span> ii = 1:size(x1,2),
+0056   
+0057   <span class="keyword">for</span> j = 1:size(x1,1),
+0058     
+0059     rays(j,ii).r = [x1(j,ii) y1(j,ii) z1(j,ii)];
+0060     rays(j,ii).e = e/norm(e);
+0061     
+0062   <span class="keyword">end</span>
+0063 <span class="keyword">end</span>
+0064 
+0065 <span class="keyword">for</span> ij = 1:length(I),
+0066   
+0067   <span class="keyword">for</span> ii = 1:size(x1,2),
+0068     
+0069     <span class="keyword">for</span> jj = 1:size(x1,1),
+0070       
+0071       rays(jj,ii).I = I(ij);
+0072       rays(jj,ii).wavelength = wavelengths(ij);
+0073       
+0074     <span class="keyword">end</span>
+0075   <span class="keyword">end</span>
+0076   
+0077   [opt_el] = <a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">opt_trace</a>(opt_el,rays(:),opt_ops);
+0078   
+0079 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

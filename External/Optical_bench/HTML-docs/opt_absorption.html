@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of opt_absorption</title>
+  <meta name="keywords" content="opt_absorption">
+  <meta name="description" content="OPT_ABSORPTION - Calculate the absorption coefficient">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>opt_absorption
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>OPT_ABSORPTION - Calculate the absorption coefficient</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function damping = opt_absorption(glass,wavelength) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> OPT_ABSORPTION - Calculate the absorption coefficient
+ The data is my reading of Pr�isions Glas &amp; Optik GmbH
+ Table of properties of common glasses. Available on:
+ http://www.pgo-online.com/intlframes/produkteset.html
+ 
+ Calling:
+ damping = opt_absorption(glass,wavelength)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">opt_trace</a>	OPT_TRACE - ray tracing through optical systems.</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function damping = opt_absorption(glass,wavelength)</a>
+0002 <span class="comment">% OPT_ABSORPTION - Calculate the absorption coefficient</span>
+0003 <span class="comment">% The data is my reading of Pr�isions Glas &amp; Optik GmbH</span>
+0004 <span class="comment">% Table of properties of common glasses. Available on:</span>
+0005 <span class="comment">% http://www.pgo-online.com/intlframes/produkteset.html</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Calling:</span>
+0008 <span class="comment">% damping = opt_absorption(glass,wavelength)</span>
+0009 
+0010 <span class="keyword">persistent</span> glass_names absorption wl_named
+0011 
+0012 <span class="keyword">if</span> isempty(glass_names)
+0013   
+0014   qwe = <span class="string">''</span>;
+0015   fp = fopen(<span class="string">'Glass.trans'</span>,<span class="string">'r'</span>);
+0016   <span class="keyword">while</span> ~feof(fp)
+0017     qwe = str2mat(qwe,fgetl(fp));
+0018   <span class="keyword">end</span>
+0019   glass_names = qwe(3:<span class="keyword">end</span>,1:7);
+0020   transmission = str2num(qwe(3:<span class="keyword">end</span>,8:end));
+0021   wl_named = str2num(qwe(2,8:end));
+0022   
+0023 <span class="keyword">end</span>
+0024 
+0025 I = strmatch(glass,glass_names);
+0026 <span class="keyword">if</span> ~isempty(I)
+0027   lambda = wl_named;
+0028   alpha = log(1-transmission(I,:))/10;<span class="comment">% units!!! ~ /mm?</span>
+0029 <span class="keyword">else</span>
+0030   <span class="keyword">switch</span> lower(glass)
+0031    <span class="keyword">case</span> <span class="string">'b270'</span>
+0032     transmission = [.12424 .83731 .88507 .9 .9 .9 .9 .9 .9 .9 .9 .9 .9 .9 .9];
+0033     alpha = [996.58 43.172 15.609 7.5415 7.646 8.3044 8.6947 8.941 <span class="keyword">...</span>
+0034              9.1052 9.2198 9.3027 9.3646 9.4119 9.4489 9.4784];
+0035     lambda =  [300 343.53 358.82 388.24 400:100:1400]*1e-9;
+0036    <span class="keyword">case</span> <span class="string">'bk7'</span>
+0037     transmission = [0.09802 0.2981 0.50024 0.69869 0.85628 0.89346 <span class="keyword">...</span>
+0038                     0.91346 0.91918 0.92775 0.93061 0.92204 0.92489 <span class="keyword">...</span>
+0039                     0.93061 0.89918 0.87345];
+0040     alpha = [223.02 111.83 60.079 26.696 6.409 2.1927 0.044224 0 0 0 <span class="keyword">...</span>
+0041              0 0 0 2.0032 4.9095];
+0042     lambda = [300 310.53 317.76 328.29 350 365.33 400 450 1000 1375 <span class="keyword">...</span>
+0043               1453.1 1500 1546.2 1853.8 2000]*1e-9;
+0044    <span class="keyword">case</span> <span class="string">'fusedsilica'</span>
+0045     transmission = [0.051752 0.19597 0.40228 0.60006 0.80112 0.81296 <span class="keyword">...</span>
+0046                     0.82184 0.86032 0.88993 0.91362 0.93139 0.94028 <span class="keyword">...</span>
+0047                     0.94028 0.94324 0.86328 0.81296 0.93436 0.93139 <span class="keyword">...</span>
+0048                     0.92547 0.90177 0.61779 0.60597 0.61484 0.80112 <span class="keyword">...</span>
+0049                     0.83368 0.84256 0.83664 0.60006 0.037045 0.022341 <span class="keyword">...</span>
+0050                     0.042928 0.60006 0.68281 0.74491 0.77154 0.65917 <span class="keyword">...</span>
+0051                     0.51146 0.43178 0.38163 0.20775 0.1518 0.054693 <span class="keyword">...</span>
+0052                     0.0076379];
+0053     alpha = [287.06 153.86 81.879 41.822 12.856 11.377 10.268 5.5872 <span class="keyword">...</span>
+0054              2.2029 0 0 0 0 0 6.054 12.063 0 0 0 1.7196 39.541 41.473 <span class="keyword">...</span>
+0055              40.022 13.557 9.5739  8.515 9.2205 42.457 320.95 371.52 <span class="keyword">...</span>
+0056              306.21 42.461 29.542 20.838 17.327 33.069 58.439 75.376 <span class="keyword">...</span>
+0057              87.722 148.54 179.91 281.99 478.86]; 
+0058     lambda = [162.31 164.64 167.53 171.55 176.68 177.81 180.07 200.47 <span class="keyword">...</span>
+0059               220.02 243.52 386.01 550 710 1210.9 1281.2 1334 1474.9 <span class="keyword">...</span>
+0060               1828.7 2006.4 2113.2 2131 2166.7 2220.2 2291.6 2309.5 <span class="keyword">...</span>
+0061               2363.1 2398.9 2470.6 2650 2739.9 2848 2974.3 3046.5 3137 <span class="keyword">...</span>
+0062               3282 3427.3 3500.1 3591.2 3627.6 3664.1 3920.1 4140.3 <span class="keyword">...</span>
+0063               4342.8]*1e-9;
+0064    <span class="keyword">case</span> <span class="string">'pyrex'</span>
+0065     transmission = [0.099787 0.79775 0.90059 0.90994 0.91306 0.90371 <span class="keyword">...</span>
+0066                     0.88188 0.88188 0.89124 0.89747 0.90059 0.90059 <span class="keyword">...</span>
+0067                     0.88188 0.85383 0.8289 0.80087 0.75728 0.69815 <span class="keyword">...</span>
+0068                     0.60176 0.52721 0.39691 0.33183 0.30085 0.2637 <span class="keyword">...</span>
+0069                     0.25132 0.2606 0.27918 0.30085 0.35042 0.39691 <span class="keyword">...</span>
+0070                     0.42481 0.43102 0.42481 0.40001 0.35351 0.30085 <span class="keyword">...</span>
+0071                     0.19871 0.099787 0.050366 0.03184];
+0072     alpha = [221.09 13.282 1.2425 0.32018 0.066598 1.3191 3.8822 3.9096 <span class="keyword">...</span>
+0073              2.877 2.1863 1.8445 1.8482 3.9513 7.186 10.15 13.591 <span class="keyword">...</span>
+0074              19.189 27.319 42.176 55.402 83.792 101.7 111.5 124.68 <span class="keyword">...</span>
+0075              129.49 125.86 118.98 111.5 96.253 83.795 77 75.551 77 <span class="keyword">...</span>
+0076              83.017 95.373 111.5 152.98 221.86 290.24 336.1];
+0077     lambda = [253.2 274.46 302.81 345.32 387.83 586.06 925.43 1130.2 <span class="keyword">...</span>
+0078               1454.6 1616.5 1785.4 1947.1 2200 2368.4 2466.6 2536.6 <span class="keyword">...</span>
+0079               2592.7 2634.7 2669.7 2697.8 2725.8 2753.8 2781.8 2823.7 <span class="keyword">...</span>
+0080               2914.7 2998.6 3033.6 3068.5 3117.4 3145.4 3166.3 3194.3 <span class="keyword">...</span>
+0081               3229.2 3264.1 3306 3340.9 3410.6 3522.2 3605.9 3682.5]*1e-9;
+0082    <span class="keyword">case</span> <span class="string">'air'</span>
+0083     lambda = [0 10000]*1e-9;
+0084     alpha = [0 0];
+0085    <span class="keyword">otherwise</span>
+0086     lambda = [0 10000]*1e-9;
+0087     alpha = [0 0];
+0088     warning([<span class="string">'No values for glass absorption for: '</span>,glass])
+0089   <span class="keyword">end</span>
+0090 
+0091 <span class="keyword">end</span>
+0092 
+0093 damping = interp1(lambda,alpha,wavelength);
+0094 ii = find(~isfinite(damping));
+0095 damping(ii) = inf;</pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

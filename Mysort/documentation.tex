@@ -1,0 +1,161 @@
+% !TEX TS-program = xelatex
+% !TEX encoding = UTF-8
+
+% This is a simple template for a XeLaTeX document using the "article" class,
+% with the fontspec package to easily select fonts.
+
+\documentclass[11pt]{article} % use larger type; default would be 10pt
+
+\usepackage{fontspec} % Font selection for XeLaTeX; see fontspec.pdf for documentation
+\defaultfontfeatures{Mapping=tex-text} % to support TeX conventions like ``---''
+\usepackage{xunicode} % Unicode support for LaTeX character names (accents, European chars, etc)
+\usepackage{xltxtra} % Extra customizations for XeLaTeX
+
+%\setmainfont{Charis SIL} % set the main body font (\textrm), assumes Charis SIL is installed
+%\setsansfont{Deja Vu Sans}
+%\setmonofont{Deja Vu Mono}
+
+% other LaTeX packages.....
+\usepackage{geometry} % See geometry.pdf to learn the layout options. There are lots.
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+%\usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+
+\usepackage{graphicx} % support the \includegraphics command and options
+
+\usepackage{listings}
+
+
+\title{Preliminary documentation to the "mysort" package -\\ a spike sorting package for Matlab}
+\author{Felix Franke, BCCN Berlin\\ff@cs.tu-berlin.de}
+%\date{} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+\begin{document}
+\maketitle
+
+\section{Installation}
+
+Add the folder that contains the +mysort folder to your Matlab path. Your done. If you want to check if it works, run the file "E01\_A.m" in the "examples" folder. You should see a figure and no warnings or errors.
+
+\section{Introduction}
+
+This is a preliminary version of a Matlab package that provides spike sorting algorithms, utility functions and visualisations. It has not been tested sufficiently yet and was only used with Matlab2008a and 2010a. The source code is not sufficiently documented, sorry for that. Also, not all the algorithms have been published. The papers are in preparation.
+
+
+\section{Principles of the software design}
+
+This implementation relies on object oriented programming (OOP). If you are not familiar with OOP, the source code might be hard to understand. However, the code was written in a way that everyone with basic Matlab skills should be able to use it.
+
+
+\section{Usability}
+
+ Since this is a preliminary version of the documentation it only covers the basic usage of the package.
+
+\subsection{Optional function parameters}
+Most functions in this package allow you to specify optional parameters. This is done in a similar way as Python would handle it, or some native functions from Matlab:
+E.g. the "plot" function of Matlab can be customised by providing name-value pairs.
+Instead of calling
+\begin{lstlisting}
+plot([1:10])
+\end{lstlisting}
+you might e.g. call:
+\begin{lstlisting}
+plot([1:10], 'linewidth', 3);
+\end{lstlisting}
+
+
+\subsection{Basic usage of the sorter}
+Suppose you have your extracellular data in a workspace variable X with the rows of X being the individual recording channels (for multi electrodes). Furthermore, T contains the templates of your spike waveforms. The rows of T are individual templates. For multichannel data, a row of T contains the individual single channel templates concatenated. Then, the following steps will allow you to sort your data.
+
+\begin{enumerate}
+\item Set you Matlab path to contain the folder that contains the +mysort folder
+
+\item  Define the number of channels
+
+	    nC = size(X,1);
+
+\item  Define the length of your templates
+
+	    Tf = size(T,2)/nC;
+
+\item  Initialise a Bayes Optimal Online Spike Sorter
+
+	    botm = mysort.sorters.BOTM();
+
+\item  Tell the sorter what templates are present in the data
+
+	    botm.setTemplates(T,nC);
+
+\item  Provide the noise covariance matrix for your data
+
+	    \% Warning: Dont do this to your real data. Use the correct \\
+             \% noise covariance matrix instead of the data covariance matrix\\
+	    R = mysort.util.mcDataCovariance(X, Tf);;\\
+	    botm.setNoiseCovarianceMatrix(R, nC);
+
+\item  Sort your data
+
+	    gdf = botm.sort(X);
+
+\item Plot the sorting
+
+	    botm.plotLastChunkSorting('X',X); 
+
+	    \% Warning! This will only work for small X! Remove this line for longer X.
+	    botm.plotSorting('X',X);
+\end{enumerate}
+
+A couple of warnings concerning this sorting:
+
+\begin{enumerate}
+\item The sorting will only work for data that fits into your working memory! For longer data, a slight modification to the use of the sorter has to be made, that is not fully covered in this documentation yet but see "About the data handling" below.
+
+\item This will result in poor sorting, since the noise covariance matrix is set to the data covariance matrix.
+
+\item This might result in poor sorting if the number of templates is not right.
+
+\item This might result in poor sorting, since the parameters for the BOTM will be set to the default values which might not be optimal for your case. Try e.g. \\
+botm = mysort.sorters.BOTM('upsample', 1);\\
+which will decrease the performance but also the computation time by a factor of roughly 4.
+\end{enumerate}
+
+\subsection{Examples}
+
+If you want to learn more about the sorter, maybe a couple of simple example files may help. In the folder "examples" you will find the corresponding Matlab scripts. For every example, there is a readme.txt, that should explain what this example illustrates.
+
+\subsection{About the data handling}
+
+In the above example, it was assumed that you have a local variable holding the extracellular data (X). This is the easiest way to use the package. This will be referred to as the "local data mode" of the spike sorting package. However, it might be very inconvenient to load all data at once into the memory. Therefore, the package allows for what will be referred to as the "dataInferface mode". Here, instead of providing the data directly, you will have to provide an instance of a class that inherits from "mysort.datafile.DataFileInterface".
+
+An example might be the "Robin" class which even exploits Matlabs capability to use memory maps that allow you to use memory on your hard drive as if it was loaded into the working memory. This allows you to sort arbitrary large data sets. You will set the sorter classes into the "dataInterface mode" by providing the 'datafile' parameter to the constructor:
+
+botm = BOTM('datafile', D, ...);
+
+\subsection{Some functions and classes:}
+
+Class BOTM: This is the class that implements the Bayes optimal template matcher (BOTM) (publication in preparation).
+
+\subsubsection{Functions for plotting}
+\begin{itemize}
+
+\item botm.plotTemplates(...)
+
+Plot the templates that are stored inside the bss class.
+
+\item botm.plotSorting(...) ("datafileInterface mode")\\
+botm.plotSorting('X',X,...) ("local data mode")
+
+Plots a piece of data, the detected spikes and their templates.
+
+\item botm.plotLastChunkSorting(...) ("datafileInterface mode")\\
+botm.plotLastChunkSorting('X',X,...) ("local data mode")
+
+Since the BOTM is implemented as an online spike sorter, it will "forget" most of the internal variables, once a chunk of data is sorted. Thus, only the last chunk can be plotted e.g. with the corresponding filter output functions.
+
+\item botm.plotISI(...)
+
+This will plot the inter spike interval distributions of the sorted spike trains.
+
+\end{itemize}
+
+\end{document}

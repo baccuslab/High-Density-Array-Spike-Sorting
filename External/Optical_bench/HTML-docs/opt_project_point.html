@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of opt_project_point</title>
+  <meta name="keywords" content="opt_project_point">
+  <meta name="description" content="OPT_PROJECT_POINT - Project light from point R with intensity I through optics OPT_EL">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>opt_project_point
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>OPT_PROJECT_POINT - Project light from point R with intensity I through optics OPT_EL</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function opt_el = opt_project_point(r,I,wavelengths,opt_el,opt_ops) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> OPT_PROJECT_POINT - Project light from point R with intensity I through optics OPT_EL 
+   
+ Calling: 
+ opt_el = opt_project_point(r,I,wavelengths,opt_el,opt_ops)
+ 
+ Input:
+   R - point [3x1] array.
+   I - light intensities [Nx1] array
+   WAVELENGTHS - light wavelength (nm)(m)
+   OPT_EL - optical system [Mx1] array of opt_elem
+   OPT_OPS - struct with options, see OPT_TYPICAL_OPS</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_ray.html" class="code" title="function ray = opt_ray()">opt_ray</a>	OPT_RAY - RAY creator for OPT_TOOLS</li><li><a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">opt_trace</a>	OPT_TRACE - ray tracing through optical systems.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_pinhole1.html" class="code" title="">opt_pinhole1</a>	Example showing pin-hole optics.</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function opt_el = opt_project_point(r,I,wavelengths,opt_el,opt_ops)</a>
+0002 <span class="comment">% OPT_PROJECT_POINT - Project light from point R with intensity I through optics OPT_EL</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Calling:</span>
+0005 <span class="comment">% opt_el = opt_project_point(r,I,wavelengths,opt_el,opt_ops)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Input:</span>
+0008 <span class="comment">%   R - point [3x1] array.</span>
+0009 <span class="comment">%   I - light intensities [Nx1] array</span>
+0010 <span class="comment">%   WAVELENGTHS - light wavelength (nm)(m)</span>
+0011 <span class="comment">%   OPT_EL - optical system [Mx1] array of opt_elem</span>
+0012 <span class="comment">%   OPT_OPS - struct with options, see OPT_TYPICAL_OPS</span>
+0013 <span class="comment">%</span>
+0014 
+0015 
+0016 <span class="keyword">if</span> length(opt_el(1).diameter)
+0017   dl = -opt_el(1).diameter/2:opt_el(1).diameter/60:opt_el(1).diameter/2;
+0018 <span class="keyword">else</span>
+0019   dl = -max(opt_el(1).dxdydz)/2:max(opt_el(1).dxdydz)/60:max(opt_el(1).dxdydz)/2;
+0020 <span class="keyword">end</span>
+0021 n = opt_el(1).n;
+0022 ey = [0 1 0];
+0023 rc = opt_el(1).r;
+0024 
+0025 <span class="keyword">if</span> dot(n,ey)&gt;1-100*eps
+0026   e1 = cross(n,ey);
+0027   e1 = e1/norm(e1);
+0028   e2 = cross(n,e1);
+0029 <span class="keyword">else</span>
+0030   e1 = cross(n,[0 0 1]);
+0031   e1 = e1/norm(e1);
+0032   e2 = cross(n,e1);
+0033 <span class="keyword">end</span>
+0034 x1 = nan*zeros([length(dl) length(dl)]);
+0035 y1 = x1;
+0036 z1 = x1;
+0037 <span class="comment">%dl(16)</span>
+0038 <span class="keyword">for</span> li1 =1:length(dl),
+0039   <span class="keyword">for</span> li2 = 1:length(dl),
+0040     rinter = rc + e1*dl(li1) + e2*dl(li2);
+0041     x1(li2,li1) = rinter(1);
+0042     y1(li2,li1) = rinter(2);
+0043     z1(li2,li1) = rinter(3);
+0044   <span class="keyword">end</span>
+0045 <span class="keyword">end</span>
+0046 dA = mean(diff(dl))^2;
+0047 
+0048 <span class="comment">% $$$ x1 = x1</span>
+0049 <span class="comment">% $$$ y1 = y1</span>
+0050 <span class="comment">% $$$ z1 = z1</span>
+0051 
+0052 
+0053 ray = <a href="opt_ray.html" class="code" title="function ray = opt_ray()">opt_ray</a>;
+0054 
+0055 rays(1:size(x1,1),1:size(x1,2)) = ray;
+0056 
+0057 <span class="keyword">for</span> ii = 1:size(x1,2),
+0058   
+0059   <span class="keyword">for</span> j = 1:size(x1,1),
+0060     
+0061     rays(j,ii).r = r;
+0062     rays(j,ii).e = [x1(j,ii) y1(j,ii) z1(j,ii)]-r;
+0063     rays(j,ii).e = rays(j,ii).e/norm(rays(j,ii).e);
+0064     
+0065   <span class="keyword">end</span> <span class="comment">% for j = 1:size(x1,</span>
+0066 <span class="keyword">end</span> <span class="comment">% for ii = 1:size(x1,</span>
+0067 
+0068 <span class="comment">%%%</span>
+0069 <span class="comment">%%% HAER MAASTE JAG MULTIPLICERA MED cos(theta)*grad(dl)^2</span>
+0070 <span class="comment">%%% OCH EVENTUELLT MED 1/(4*pi*r^2)</span>
+0071 <span class="comment">%%% gjort</span>
+0072 
+0073 <span class="keyword">for</span> ii = 1:length(I),
+0074   
+0075   <span class="keyword">for</span> iii = 1:size(x1,2),
+0076     
+0077     <span class="keyword">for</span> jj = 1:size(x1,1),
+0078       
+0079       rays(jj,iii).I = [I(ii) / <span class="keyword">...</span>
+0080                       norm([x1(jj,ii) y1(jj,ii) z1(jj,ii)]-r)^2 * <span class="keyword">...</span>
+0081                       abs(dot(rays(jj,iii).e,opt_el(1).n)) * <span class="keyword">...</span>
+0082                       dA];
+0083       rays(jj,iii).wavelength = wavelengths(ii);
+0084       
+0085     <span class="keyword">end</span>
+0086   <span class="keyword">end</span>
+0087   
+0088   [opt_el] = <a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">opt_trace</a>(opt_el,rays(:),opt_ops);
+0089   
+0090 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

@@ -1,0 +1,33 @@
+#type        lens
+curvature1  143.47
+curvature2  52.5    
+r_1          -0 0 0
+r_2           7 0 0 
+diameter1    213
+diameter2    104.6
+glass       bk7    
+arc         .5     
+#type        lens
+curvature1  76.4     
+curvature2  31.521    
+r_1          35 0 0
+r_2          38.8 0 0 
+diameter1   100.0
+diameter2   61.0
+glass       bk7    
+arc         .5     
+#type        lens
+curvature1  150.00     
+curvature2  17.1   
+r_1          60.6 0 0
+r_2          63.6 0 0 
+diameter1   56.0
+diameter2   33.0
+glass       bk7    
+arc         .5     
+#type       screen
+normal      1 0 0    
+r1          90 0 0   
+dxdydz      0 15 15
+imgres      512 512 
+#type       end

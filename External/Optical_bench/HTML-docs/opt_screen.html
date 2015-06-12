@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of opt_screen</title>
+  <meta name="keywords" content="opt_screen">
+  <meta name="description" content="OPT_SCREEN - Screen - imaging detector.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>opt_screen
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>OPT_SCREEN - Screen - imaging detector.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [opt1] = opt_screen(opt_type,opt_args) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> OPT_SCREEN - Screen - imaging detector.
+ OPT_TYPE should be 'screen' (hm good and vital argument), OPT_SPEC
+ should be a string matrix, see README_OPT for specification.
+   Necessary specification fields: 
+ r1, dxdydx, imgres
+   Optional specification fields:
+ normal
+ example OPT_SPEC:
+ 'normal      1 0 0'
+ 'r1          12 0 0'
+ 'dxdydz      0 1.5 1.5'
+   
+ Calling:
+ [opt1] = opt_screen(opt_type,opt_args)
+ 
+ See also <a href="opt_lens.html" class="code" title="function [opt] = opt_lens(opt_type,opt_spec)">OPT_LENS</a>, <a href="opt_screen.html" class="code" title="function [opt1] = opt_screen(opt_type,opt_args)">OPT_SCREEN</a>, <a href="opt_grid.html" class="code" title="function [opt1] = opt_grid(opt_type,opt_args)">OPT_GRID</a>, <a href="opt_prism.html" class="code" title="function [opt] = opt_prism(opt_type,opt_spec)">OPT_PRISM</a>, <a href="opt_slit.html" class="code" title="function [opt1] = opt_slit(opt_type,opt_args)">OPT_SLIT</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_elem.html" class="code" title="function opt_elem = opt_elem(type)">opt_elem</a>	OPT_ELEM - Default opt_elem structure</li><li><a href="opt_findstr.html" class="code" title="function [jj] = opt_findstr(H,s)">opt_findstr</a>	OPT_FINDSTR - find string S in character array H,</li><li><a href="opt_screen.html" class="code" title="function [opt1] = opt_screen(opt_type,opt_args)">opt_screen</a>	OPT_SCREEN - Screen - imaging detector.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_build.html" class="code" title="function opt_elems = opt_build(file)">opt_build</a>	OPT_BUILD - Builds optical system specified in FILE</li><li><a href="opt_exempel.html" class="code" title="">opt_exempel</a>	Example showing the capabilities of Optical_bench:</li><li><a href="opt_exempel2.html" class="code" title="">opt_exempel2</a>	Example of</li><li><a href="opt_exempel3.html" class="code" title="">opt_exempel3</a>	Example of spherical aberation</li><li><a href="opt_exempel5.html" class="code" title="">opt_exempel5</a>	Example of Spherical abberation</li><li><a href="opt_exmpl_chromatic_ab.html" class="code" title="">opt_exmpl_chromatic_ab</a>	Example showing chromatic aberration</li><li><a href="opt_exmpl_coma.html" class="code" title="">opt_exmpl_coma</a>	Example showing coma (aberration)</li><li><a href="opt_screen.html" class="code" title="function [opt1] = opt_screen(opt_type,opt_args)">opt_screen</a>	OPT_SCREEN - Screen - imaging detector.</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [opt1] = opt_screen(opt_type,opt_args)</a>
+0002 <span class="comment">% OPT_SCREEN - Screen - imaging detector.</span>
+0003 <span class="comment">% OPT_TYPE should be 'screen' (hm good and vital argument), OPT_SPEC</span>
+0004 <span class="comment">% should be a string matrix, see README_OPT for specification.</span>
+0005 <span class="comment">%   Necessary specification fields:</span>
+0006 <span class="comment">% r1, dxdydx, imgres</span>
+0007 <span class="comment">%   Optional specification fields:</span>
+0008 <span class="comment">% normal</span>
+0009 <span class="comment">% example OPT_SPEC:</span>
+0010 <span class="comment">% 'normal      1 0 0'</span>
+0011 <span class="comment">% 'r1          12 0 0'</span>
+0012 <span class="comment">% 'dxdydz      0 1.5 1.5'</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Calling:</span>
+0015 <span class="comment">% [opt1] = opt_screen(opt_type,opt_args)</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% See also OPT_LENS, OPT_SCREEN, OPT_GRID, OPT_PRISM, OPT_SLIT</span>
+0018 
+0019 <span class="comment">% Version: 1.0</span>
+0020 <span class="comment">% Copyright: Bjorn Gustavsson 20020430</span>
+0021 
+0022 <span class="keyword">if</span> nargin ~= 2,
+0023   help <a href="opt_screen.html" class="code" title="function [opt1] = opt_screen(opt_type,opt_args)">opt_screen</a>;
+0024   ok = 0;
+0025   <span class="keyword">return</span>;
+0026 <span class="keyword">end</span>
+0027 
+0028 opt1 = <a href="opt_elem.html" class="code" title="function opt_elem = opt_elem(type)">opt_elem</a>(opt_type);
+0029 
+0030 <span class="comment">% defaults</span>
+0031 opt1.r(2:3) = 0;   <span class="comment">% Screen centered on the optical axis</span>
+0032 opt1.n = [1 0 0];   <span class="comment">% Screen paralell with the optical axis</span>
+0033 opt1.glass = <span class="string">'air'</span>;
+0034 <span class="comment">% set the necessary ones:</span>
+0035 <span class="comment">% screen size</span>
+0036 ii = <a href="opt_findstr.html" class="code" title="function [jj] = opt_findstr(H,s)">opt_findstr</a>(opt_args,<span class="string">'dydz'</span>);
+0037 opt1.dxdydz = str2num(opt_args(ii,12:end));
+0038 <span class="comment">% screen position</span>
+0039 ii = <a href="opt_findstr.html" class="code" title="function [jj] = opt_findstr(H,s)">opt_findstr</a>(opt_args,<span class="string">'r1'</span>);
+0040 opt1.r = str2num(opt_args(ii,12:end));
+0041 ii = <a href="opt_findstr.html" class="code" title="function [jj] = opt_findstr(H,s)">opt_findstr</a>(opt_args,<span class="string">'imgres'</span>);
+0042 opt1.imgres = str2num(opt_args(ii(1),12:end));
+0043 opt1.img = zeros(opt1.imgres);
+0044 
+0045 <span class="comment">% set the optional ones</span>
+0046 ii = <a href="opt_findstr.html" class="code" title="function [jj] = opt_findstr(H,s)">opt_findstr</a>(opt_args,<span class="string">'normal'</span>);
+0047 <span class="keyword">if</span> length(ii) == 1
+0048   
+0049   opt1.n = str2num(opt_args(ii(1),12:end));
+0050   
+0051 <span class="keyword">end</span>
+0052</pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

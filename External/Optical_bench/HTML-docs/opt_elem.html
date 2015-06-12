@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of opt_elem</title>
+  <meta name="keywords" content="opt_elem">
+  <meta name="description" content="OPT_ELEM - Default opt_elem structure">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>opt_elem
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>OPT_ELEM - Default opt_elem structure</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function opt_elem = opt_elem(type) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> OPT_ELEM - Default opt_elem structure
+ 
+ Calling
+  opt_elem = opt_elem(type)
+ 
+ See also <a href="opt_aperture.html" class="code" title="function [opt1] = opt_aperture(opt_type,opt_args)">OPT_APERTURE</a>, <a href="opt_grid.html" class="code" title="function [opt1] = opt_grid(opt_type,opt_args)">OPT_GRID</a>, <a href="opt_lens.html" class="code" title="function [opt] = opt_lens(opt_type,opt_spec)">OPT_LENS</a>, <a href="opt_prism.html" class="code" title="function [opt] = opt_prism(opt_type,opt_spec)">OPT_PRISM</a>, <a href="opt_screen.html" class="code" title="function [opt1] = opt_screen(opt_type,opt_args)">OPT_SCREEN</a>, <a href="opt_slit.html" class="code" title="function [opt1] = opt_slit(opt_type,opt_args)">OPT_SLIT</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_aperture.html" class="code" title="function [opt1] = opt_aperture(opt_type,opt_args)">opt_aperture</a>	OPT_APERTURE Circular aperture, iris</li><li><a href="opt_build.html" class="code" title="function opt_elems = opt_build(file)">opt_build</a>	OPT_BUILD - Builds optical system specified in FILE</li><li><a href="opt_fcn.html" class="code" title="function [opt1] = opt_fcn(opt_type,opt_args)">opt_fcn</a>	OPT_FCN optical surface with general shape</li><li><a href="opt_fresnel.html" class="code" title="function [opt] = opt_fresnel(opt_type,opt_spec)">opt_fresnel</a>	OPT_LENS - Spherical lens single glass.</li><li><a href="opt_fresnellens.html" class="code" title="function [opt] = opt_fresnellens(opt_type,opt_spec)">opt_fresnellens</a>	OPT_FRESNELLENS - Fresnel lens conical groves.</li><li><a href="opt_grid.html" class="code" title="function [opt1] = opt_grid(opt_type,opt_args)">opt_grid</a>	OPT_GRID - Simple difractive grating</li><li><a href="opt_lens.html" class="code" title="function [opt] = opt_lens(opt_type,opt_spec)">opt_lens</a>	OPT_LENS - Spherical lens single glass.</li><li><a href="opt_prism.html" class="code" title="function [opt] = opt_prism(opt_type,opt_spec)">opt_prism</a>	OPT_LENS - Spherical lens single glass.</li><li><a href="opt_screen.html" class="code" title="function [opt1] = opt_screen(opt_type,opt_args)">opt_screen</a>	OPT_SCREEN - Screen - imaging detector.</li><li><a href="opt_slit.html" class="code" title="function [opt1] = opt_slit(opt_type,opt_args)">opt_slit</a>	OPT_SLIT - optical slit.</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function opt_elem = opt_elem(type)</a>
+0002 <span class="comment">% OPT_ELEM - Default opt_elem structure</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Calling</span>
+0005 <span class="comment">%  opt_elem = opt_elem(type)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% See also OPT_APERTURE, OPT_GRID, OPT_LENS, OPT_PRISM, OPT_SCREEN, OPT_SLIT</span>
+0008 
+0009 <span class="comment">% Version: 1.0</span>
+0010 <span class="comment">% Copyright: Bjorn Gustavsson 20020430</span>
+0011 
+0012 
+0013 opt_elem.type = type;
+0014 
+0015 opt_elem.r = []; <span class="comment">% location of the optical element</span>
+0016 opt_elem.n = []; <span class="comment">% normal of the optical element</span>
+0017 opt_elem.dxdydz = []; <span class="comment">% rectangular size</span>
+0018 opt_elem.diameter = []; <span class="comment">% Circular size</span>
+0019 opt_elem.glass = <span class="string">''</span>; <span class="comment">% Glass type, for apertures and the like -&gt; `air'!</span>
+0020 opt_elem.arc = [];   <span class="comment">% Anti reflectin coating, currently scalar(*)</span>
+0021 opt_elem.imgres = [];<span class="comment">% size of image: [sx sy]</span>
+0022 opt_elem.img = [];   <span class="comment">% image</span>
+0023 opt_elem.r_o_curv = []; <span class="comment">% spherical curvature of lenses.</span>
+0024 opt_elem.lpmm = [];     <span class="comment">% lines per milimeter for grids</span>
+0025 opt_elem.e_slits = [];  <span class="comment">% unit vector || with grid slits</span>
+0026 opt_elem.absorption = 0; <span class="comment">% absorpption</span>
+0027 opt_elem.fcn1 = inline(<span class="string">''</span>);
+0028 opt_elem.fcn2 = inline(<span class="string">''</span>);
+0029 opt_elem.arglist = struct;</pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

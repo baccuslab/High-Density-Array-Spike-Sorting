@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of opt_trace</title>
+  <meta name="keywords" content="opt_trace">
+  <meta name="description" content="OPT_TRACE - ray tracing through optical systems.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>opt_trace
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>OPT_TRACE - ray tracing through optical systems.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [optelements] = opt_trace(optelements,rays,opt_ops) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> OPT_TRACE - ray tracing through optical systems.
+ This function handles aberationand and attenuation in an optical
+ lens system. Currently suported optical elements are Lenses,
+ apertures, grids prisms (without internal reflection), slits, and
+ transmission grids (only main maximas). Currently unsupported:
+ Mirrors, beam splitters, diffraction.
+ 
+ Calling:
+ [optelements] = opt_trace(optelements,rays,opt_ops)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_absorption.html" class="code" title="function damping = opt_absorption(glass,wavelength)">opt_absorption</a>	OPT_ABSORPTION - Calculate the absorption coefficient</li><li><a href="opt_intersection.html" class="code" title="function rinter = opt_intersection(optelem,rayin)">opt_intersection</a>	OPT_INTERSECTION - Determine the impact point of an optical</li><li><a href="opt_refraction.html" class="code" title="function [en,refraction_loss,n_refr,phase_shift] = opt_refraction(r_int,ray,optelem)">opt_refraction</a>	OPT_REFRACTION - calculation of optical refraction - Snells law.</li><li><a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">opt_trace</a>	OPT_TRACE - ray tracing through optical systems.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_exempel.html" class="code" title="">opt_exempel</a>	Example showing the capabilities of Optical_bench:</li><li><a href="opt_exempel2.html" class="code" title="">opt_exempel2</a>	Example of</li><li><a href="opt_exempel3.html" class="code" title="">opt_exempel3</a>	Example of spherical aberation</li><li><a href="opt_exempel5.html" class="code" title="">opt_exempel5</a>	Example of Spherical abberation</li><li><a href="opt_exempel6.html" class="code" title="">opt_exempel6</a>	Example showing Spherical abberation and Coma.</li><li><a href="opt_exmpl_astigmatic.html" class="code" title="">opt_exmpl_astigmatic</a>	Example showing astigmatic aberration</li><li><a href="opt_exmpl_chromatic_ab.html" class="code" title="">opt_exmpl_chromatic_ab</a>	Example showing chromatic aberration</li><li><a href="opt_exmpl_coma.html" class="code" title="">opt_exmpl_coma</a>	Example showing coma (aberration)</li><li><a href="opt_exmpl_field_curv.html" class="code" title="">opt_exmpl_field_curv</a>	Example showing curvature of focus (aberration).</li><li><a href="opt_exmpl_sphere_coma.html" class="code" title="">opt_exmpl_sphere_coma</a>	Example showing spherical aberation and coma</li><li><a href="opt_project_direction.html" class="code" title="function opt_el = opt_project_direction(e,I,wavelengths,opt_el,opt_ops)">opt_project_direction</a>	OPT_PROJECT_POINT - Project light from direction E with intensity I throug OPT_EL</li><li><a href="opt_project_point.html" class="code" title="function opt_el = opt_project_point(r,I,wavelengths,opt_el,opt_ops)">opt_project_point</a>	OPT_PROJECT_POINT - Project light from point R with intensity I through optics OPT_EL</li><li><a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">opt_trace</a>	OPT_TRACE - ray tracing through optical systems.</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [optelements] = opt_trace(optelements,rays,opt_ops)</a>
+0002 <span class="comment">% OPT_TRACE - ray tracing through optical systems.</span>
+0003 <span class="comment">% This function handles aberationand and attenuation in an optical</span>
+0004 <span class="comment">% lens system. Currently suported optical elements are Lenses,</span>
+0005 <span class="comment">% apertures, grids prisms (without internal reflection), slits, and</span>
+0006 <span class="comment">% transmission grids (only main maximas). Currently unsupported:</span>
+0007 <span class="comment">% Mirrors, beam splitters, diffraction.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Calling:</span>
+0010 <span class="comment">% [optelements] = opt_trace(optelements,rays,opt_ops)</span>
+0011 <span class="comment">%</span>
+0012 
+0013 <span class="comment">% Version: 1.09</span>
+0014 <span class="comment">% Copyright: Bjorn Gustavsson 20020430</span>
+0015 
+0016 <span class="comment">% trace all rays</span>
+0017 <span class="keyword">for</span> ii = 1:length(rays)
+0018   
+0019   <span class="keyword">if</span> length(rays(ii).r) &amp; length(rays(ii).e) &amp; rays(ii).I&gt;0
+0020     
+0021     <span class="comment">% determine where on the next optical element the ray intersects</span>
+0022     ri_int = <a href="opt_intersection.html" class="code" title="function rinter = opt_intersection(optelem,rayin)">opt_intersection</a>(optelements(1),rays(ii));
+0023     <span class="keyword">if</span> ~isempty(ri_int)
+0024       <span class="comment">% calculate:</span>
+0025       <span class="comment">% the line-of-sight after refraction</span>
+0026       <span class="comment">% the reflected intensity (unpolarised)</span>
+0027       <span class="comment">% and the refractive index after the surface</span>
+0028       [en,refrloss,n_refr] = <a href="opt_refraction.html" class="code" title="function [en,refraction_loss,n_refr,phase_shift] = opt_refraction(r_int,ray,optelem)">opt_refraction</a>(ri_int,rays(ii),optelements(1));
+0029       <span class="comment">% calculate the intensity after absorption and reflection</span>
+0030       I = rays(ii).I*(1-refrloss)*exp(-rays(ii).absorption* <span class="keyword">...</span>
+0031                                       (norm(rays(ii).r-ri_int)));
+0032       <span class="keyword">if</span> isfield(rays(ii),<span class="string">'phase'</span>)
+0033         <span class="comment">% if the ray caries phase information - update</span>
+0034         rays.phase = ( rays.phase + <span class="keyword">...</span>
+0035                        2*pi / r_tmp(ii).n/r_tmp(ii).wavelength * norm(r_tmp(ii).r-ri_int) );
+0036       <span class="keyword">end</span>
+0037       <span class="keyword">for</span> jj = 1:size(en,1),
+0038         
+0039         r_tmp(jj) = rays(ii);
+0040         r_tmp(jj).r = ri_int;
+0041         r_tmp(jj).e = en(jj,:);
+0042         r_tmp(jj).I = I/size(en,2);
+0043         r_tmp(jj).absorption = <a href="opt_absorption.html" class="code" title="function damping = opt_absorption(glass,wavelength)">opt_absorption</a>(optelements(1).glass,r_tmp(jj).wavelength);
+0044         r_tmp(jj).n = n_refr;
+0045         
+0046       <span class="keyword">end</span>
+0047       
+0048       <span class="comment">% if ray fall onto screen - add intensity to image.</span>
+0049       <span class="keyword">if</span> strcmp(<span class="string">'screen'</span>,optelements(1).type)
+0050         <span class="comment">% where in the image plane</span>
+0051         imgindx1 = round(1+( ri_int(2) - (optelements(1).r(2)-optelements(1).dxdydz(2)/2) )/optelements(1).dxdydz(2)*(optelements(1).imgres(1)));
+0052         imgindx2 = round(1+( ri_int(3) - (optelements(1).r(3)-optelements(1).dxdydz(3)/2) )/optelements(1).dxdydz(3)*(optelements(1).imgres(2)));
+0053         <span class="comment">% if ray fall onto screen - add intensity to image.</span>
+0054         <span class="keyword">if</span> ( imgindx1 &gt; 0 &amp; <span class="keyword">...</span>
+0055              imgindx2 &gt; 0 &amp; <span class="keyword">...</span>
+0056              imgindx1 &lt;= optelements(1).imgres(1) &amp; <span class="keyword">...</span>
+0057              imgindx2 &lt;= optelements(1).imgres(2) )
+0058           <span class="keyword">if</span> isfield(rays(ii),<span class="string">'phase'</span>)
+0059             <span class="comment">% seems as infinite coherence length to me...</span>
+0060             optelements(1).img((imgindx2),(imgindx1)) = ( optelements(1).img(imgindx2,imgindx1) +<span class="keyword">...</span>
+0061                                                           rays(ii).I*exp(i*rays(ii).phase) );
+0062           <span class="keyword">else</span>
+0063             optelements(1).img((imgindx2),(imgindx1)) = ( optelements(1).img(imgindx2,imgindx1) +<span class="keyword">...</span>
+0064                                                           rays(ii).I );
+0065           <span class="keyword">end</span>
+0066         <span class="keyword">end</span>
+0067       <span class="keyword">end</span>
+0068       <span class="comment">% plot the raytrace...</span>
+0069       <span class="keyword">if</span> isfield(opt_ops,<span class="string">'plotrays'</span>) &amp; opt_ops.plotrays==1 &amp; prod(size(en))
+0070         
+0071         plot3([rays(ii).r(1) r_tmp(1).r(1)],<span class="keyword">...</span>
+0072               [rays(ii).r(2) r_tmp(1).r(2)],<span class="keyword">...</span>
+0073               [rays(ii).r(3) r_tmp(1).r(3)],<span class="string">'-'</span>,<span class="string">'color'</span>,rays(ii).color)
+0074         <span class="keyword">if</span> strcmp(<span class="string">'screen'</span>,optelements(1).type)
+0075 <span class="comment">% $$$         plot3([rays(ii).r(1) r_tmp(1).r(1)],...</span>
+0076 <span class="comment">% $$$               [rays(ii).r(2) r_tmp(1).r(2)],...</span>
+0077 <span class="comment">% $$$               [rays(ii).r(3) r_tmp(1).r(3)],'.','color',rays(ii).color)</span>
+0078 <span class="comment">% $$$         plot3([rays(ii).r(1)],...</span>
+0079 <span class="comment">% $$$               [rays(ii).r(2)],...</span>
+0080 <span class="comment">% $$$               [rays(ii).r(3)],'.','color',rays(ii).color)</span>
+0081           plot3([r_tmp(1).r(1)],<span class="keyword">...</span>
+0082                 [r_tmp(1).r(2)],<span class="keyword">...</span>
+0083                 [r_tmp(1).r(3)],<span class="string">'.'</span>,<span class="string">'color'</span>,rays(ii).color)
+0084         <span class="keyword">end</span> <span class="comment">% if strcmp('screen',</span>
+0085         grid on
+0086         hold on
+0087         <span class="comment">% ...and pause...</span>
+0088         <span class="keyword">if</span> isfield(opt_ops,<span class="string">'plotpaus'</span>) &amp; opt_ops.plotpaus
+0089           disp(<span class="string">'push any button'</span>)
+0090           pause
+0091         <span class="keyword">end</span>
+0092         <span class="comment">% or at least do it real time.</span>
+0093         <span class="keyword">if</span> isfield(opt_ops,<span class="string">'plotRT'</span>) &amp; opt_ops.plotRT
+0094           drawnow
+0095         <span class="keyword">end</span>
+0096       <span class="keyword">end</span>
+0097       <span class="keyword">if</span> isfield(opt_ops,<span class="string">'plotrayp'</span>) &amp; opt_ops.plotrayp==1 &amp; prod(size(en))
+0098         
+0099         <span class="keyword">if</span> strcmp(<span class="string">'screen'</span>,optelements(1).type)
+0100           plot3([rays(ii).r(1) r_tmp(1).r(1)],<span class="keyword">...</span>
+0101                 [rays(ii).r(2) r_tmp(1).r(2)],<span class="keyword">...</span>
+0102                 [rays(ii).r(3) r_tmp(1).r(3)],<span class="string">'.'</span>,<span class="string">'color'</span>,rays(ii).color)
+0103         <span class="keyword">end</span> <span class="comment">% if strcmp('screen',</span>
+0104       <span class="keyword">end</span> <span class="comment">% if isfield(opt_ops,</span>
+0105       
+0106       <span class="comment">% Recursion - sorry about that.</span>
+0107       <span class="keyword">if</span> length(optelements) &gt; 1 &amp; sum([r_tmp(:).I]) &gt; 0
+0108         [opt_es] = <a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">opt_trace</a>(optelements(2:end),r_tmp,opt_ops);
+0109         optelements = [optelements(1) opt_es];
+0110       <span class="keyword">end</span>
+0111     <span class="keyword">end</span>
+0112     
+0113   <span class="keyword">end</span> <span class="comment">% if length(rays(ii).</span>
+0114   
+0115 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>
