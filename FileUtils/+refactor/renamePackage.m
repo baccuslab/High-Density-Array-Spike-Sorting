@@ -1,1 +1,0 @@
-function renamePackage(oldPackageName, newPackageName)

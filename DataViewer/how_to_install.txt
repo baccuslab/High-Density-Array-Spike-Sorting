@@ -1,9 +1,0 @@
-Install:
-1) rename .zip_ in .zip
-2) unzip to a <folder>
-3) add the <folder> to your matlab path
-4) add the dataviewerpackage and the mysortpackage folder to your matlab path
-5) open /+db/+munk/DBconfig_Select.m
-6) modify the connection settings according to your database connection. we are using an ssh tunnel, this is why the DB is always on localhost for us.
-
-7) type "dataViewer" in the Matlab prompt to start the application

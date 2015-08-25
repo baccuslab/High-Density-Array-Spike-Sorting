@@ -1,1 +1,0 @@
-fprintf('\n\nmysort.plot.figure([1000 800]);\nnR = 2; nC = 2; p=0; ah = [];\np = p+1; ah(p) = subplot(nR, nC, p); hold on;\n\n%% mysort.plot.legend({{''-'', ''color'', [.3 .3 .7], ''linewidth'', 2}, {}}, {''name1'', ''name2''});\n\n\nmysort.plot.figureTitle('''');\nmysort.plot.figureDate();\n%% mysort.plot.savefig(gcf, '''', ''fig'', 0);\n\n');
