@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of opt_f2r</title>
+  <meta name="keywords" content="opt_f2r">
+  <meta name="description" content="OPT_F2R Thin lens focal width to lens curvature radius.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>opt_f2r
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>OPT_F2R Thin lens focal width to lens curvature radius.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [r] = opt_f2r(f,n) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> OPT_F2R Thin lens focal width to lens curvature radius.
+ F - focal width, N refractive index.
+ 
+ Calling:
+ [opt] = opt_f2r(opt_type,opt_spec)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_f2r.html" class="code" title="function [r] = opt_f2r(f,n)">opt_f2r</a>	OPT_F2R Thin lens focal width to lens curvature radius.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_f2r.html" class="code" title="function [r] = opt_f2r(f,n)">opt_f2r</a>	OPT_F2R Thin lens focal width to lens curvature radius.</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [r] = opt_f2r(f,n)</a>
+0002 <span class="comment">% OPT_F2R Thin lens focal width to lens curvature radius.</span>
+0003 <span class="comment">% F - focal width, N refractive index.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Calling:</span>
+0006 <span class="comment">% [opt] = opt_f2r(opt_type,opt_spec)</span>
+0007 <span class="comment">%</span>
+0008 
+0009 <span class="keyword">if</span> nargin ~= 2,
+0010   help <a href="opt_f2r.html" class="code" title="function [r] = opt_f2r(f,n)">opt_f2r</a>;
+0011   ok = 0;
+0012   <span class="keyword">return</span>;
+0013 <span class="keyword">end</span>;
+0014 
+0015 <span class="comment">% Scool-book formula for thin lens:</span>
+0016 <span class="comment">% 1/F = (n_g-1)(1/r1-1/r2)</span>
+0017 <span class="comment">% We take it as a symetrical lens (r2 = -r1):</span>
+0018 <span class="comment">%1/F = (n_g-1)(2/r1)</span>
+0019 r = f*(n-1)*2;</pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

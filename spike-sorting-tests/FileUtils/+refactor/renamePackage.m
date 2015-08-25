@@ -1,0 +1,1 @@
+function renamePackage(oldPackageName, newPackageName)

@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of opt_exmpl_astigmatic</title>
+  <meta name="keywords" content="opt_exmpl_astigmatic">
+  <meta name="description" content="Example showing astigmatic aberration">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>opt_exmpl_astigmatic
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Example showing astigmatic aberration</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Example showing astigmatic aberration</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_build.html" class="code" title="function opt_elems = opt_build(file)">opt_build</a>	OPT_BUILD - Builds optical system specified in FILE</li><li><a href="opt_f_of_r1nr2zc.html" class="code" title="function f = opt_f_of_r1nr2zc(r1,n,r2,zc)">opt_f_of_r1nr2zc</a>	OPT_R2_OF_FNR1_THICK - second radii of curvature given F, N R1 and ZC, thick lens</li><li><a href="opt_plotoptics.html" class="code" title="function Hs = opt_plotoptics(opt_el,plotmode)">opt_plotoptics</a>	OPT_PLOTOPTICS - Plot the optical system.</li><li><a href="opt_project_direction.html" class="code" title="function opt_el = opt_project_direction(e,I,wavelengths,opt_el,opt_ops)">opt_project_direction</a>	OPT_PROJECT_POINT - Project light from direction E with intensity I throug OPT_EL</li><li><a href="opt_r2_of_fnr1_thick.html" class="code" title="function r2 = opt_r2_of_fnr1_thick(f,n,r1,zc)">opt_r2_of_fnr1_thick</a>	r2 = opt_r2_of_fnr1_thick(f,n,r1,zc)</li><li><a href="opt_ray.html" class="code" title="function ray = opt_ray()">opt_ray</a>	OPT_RAY - RAY creator for OPT_TOOLS</li><li><a href="opt_refrindx.html" class="code" title="function n = opt_refrindx(glass,wavelength)">opt_refrindx</a>	OPT_REFRINDX refractive index calculations.</li><li><a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">opt_trace</a>	OPT_TRACE - ray tracing through optical systems.</li><li><a href="opt_vini.html" class="code" title="function vini = opt_vini(r1,r2,ng,zc)">opt_vini</a>	OPT_VINI - Rear nodal point distance from rear vertex of thick lens</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Example showing astigmatic aberration</span>
+0002 
+0003 
+0004 <span class="comment">% Set the options for ploting of the optics/raytracing</span>
+0005 opt_ops.plotrays=1; <span class="comment">% plot the individual rays</span>
+0006 opt_ops.plotpaus=0; <span class="comment">% do not pause after each  ray intersection</span>
+0007 opt_ops.plotRT = 0; <span class="comment">% do not ``drawnow'' after each ray intersection</span>
+0008 opt_ops.plotrayp=0;
+0009 
+0010 <span class="comment">% build the optical system as specified in opt.exmpl</span>
+0011 opt_el = <a href="opt_build.html" class="code" title="function opt_elems = opt_build(file)">opt_build</a>(<span class="string">'opt.7.exmpl'</span>);
+0012 
+0013 
+0014 ray = <a href="opt_ray.html" class="code" title="function ray = opt_ray()">opt_ray</a>;
+0015 
+0016 nr_rays = 22;
+0017 
+0018 r = [-150 0 -16*2^.5];
+0019 e = -r/norm(r);
+0020   
+0021 
+0022 <span class="keyword">for</span> ray_i = 1:nr_rays,
+0023   
+0024   rays(ray_i) = ray;
+0025   rays(ray_i).e = e;
+0026   <span class="keyword">if</span> ray_i &lt;= 11
+0027     rays(ray_i).r = opt_el(1).r+.3*(ray_i-6)*[0 1 0];
+0028     rays(ray_i).color = [0 0 1];<span class="comment">% blue - color is line color for</span>
+0029                                 <span class="comment">% plotting of rays</span>
+0030   <span class="keyword">else</span>
+0031     rays(ray_i).r = opt_el(1).r+.3*(ray_i-17)*[0 0 1];
+0032     rays(ray_i).color = [1 0 0];<span class="comment">% blue - color is line color for</span>
+0033                                 <span class="comment">% plotting of rays</span>
+0034   <span class="keyword">end</span>
+0035   rays(ray_i).r = rays(ray_i).r + -3*rays(ray_i).e;
+0036   
+0037 <span class="keyword">end</span>
+0038 
+0039 
+0040 r1 = fliplr(1./[-1/6:1/12-eps:1/6]);
+0041 r1 = r1(3);
+0042 
+0043 ng = <a href="opt_refrindx.html" class="code" title="function n = opt_refrindx(glass,wavelength)">opt_refrindx</a>(opt_el(2).glass,ray.wavelength);
+0044 f = <a href="opt_f_of_r1nr2zc.html" class="code" title="function f = opt_f_of_r1nr2zc(r1,n,r2,zc)">opt_f_of_r1nr2zc</a>(opt_el(2).r_o_curv,<span class="keyword">...</span>
+0045                      ng,<span class="keyword">...</span>
+0046                      opt_el(3).r_o_curv,<span class="keyword">...</span>
+0047                      norm(opt_el(3).r-opt_el(2).r));
+0048 
+0049 
+0050 r2 = <a href="opt_r2_of_fnr1_thick.html" class="code" title="function r2 = opt_r2_of_fnr1_thick(f,n,r1,zc)">opt_r2_of_fnr1_thick</a>(f,ng,r1(1),norm(opt_el(3).r-opt_el(2).r));
+0051 
+0052 opt_el(3).r_o_curv = -r1(1);
+0053 opt_el(2).r_o_curv = -r2;
+0054 F(1) = <a href="opt_f_of_r1nr2zc.html" class="code" title="function f = opt_f_of_r1nr2zc(r1,n,r2,zc)">opt_f_of_r1nr2zc</a>(opt_el(2).r_o_curv,<span class="keyword">...</span>
+0055                         ng,<span class="keyword">...</span>
+0056                         opt_el(3).r_o_curv,<span class="keyword">...</span>
+0057                         norm(opt_el(3).r-opt_el(2).r));
+0058 
+0059 vini = <a href="opt_vini.html" class="code" title="function vini = opt_vini(r1,r2,ng,zc)">opt_vini</a>(opt_el(2).r_o_curv,opt_el(3).r_o_curv,ng,norm(opt_el(3).r-opt_el(2).r));
+0060 opt_el(end).r(1) = opt_el(3).r(1) - vini*opt_el(3).n(1) + F(1)*opt_el(3).n(1);
+0061 
+0062 <a href="opt_plotoptics.html" class="code" title="function Hs = opt_plotoptics(opt_el,plotmode)">opt_plotoptics</a>(opt_el([2:3 5:end]),1);
+0063 hold on
+0064 <a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">opt_trace</a>(opt_el([2 3 end]),rays,opt_ops);
+0065 alpha = 0.1;
+0066 view(-30,20)
+0067 
+0068 
+0069 keyboard
+0070 
+0071 opt_ops.plotrays=0; <span class="comment">% not plot the individual rays</span>
+0072 
+0073 <span class="comment">%r_test = [11.582 11.07 10.57 10.82];</span>
+0074 r_test = [11.582 10.1 10.2 10.15];
+0075 r_test = [11.582 11.2 10.9 11.05];
+0076 <span class="keyword">for</span> jj = 1:length(r_test),
+0077   
+0078   
+0079   opt_el(end).img = 0*opt_el(end).img;
+0080   
+0081   subplot(2,2,jj)
+0082   opt_el(end).r(1) = r_test(jj);
+0083   opt_el = <a href="opt_project_direction.html" class="code" title="function opt_el = opt_project_direction(e,I,wavelengths,opt_el,opt_ops)">opt_project_direction</a>(e,1,ray.wavelength,opt_el,opt_ops);
+0084   hold off
+0085   cK = [.25 .5 .25;.5 1 .5;.25 .5 .25];
+0086   cK = cK/sum(cK(:));
+0087   imagesc(conv2(opt_el(end).img,cK,<span class="string">'same'</span>))
+0088   drawnow
+0089 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

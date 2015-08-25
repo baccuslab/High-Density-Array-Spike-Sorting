@@ -1,0 +1,469 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of opt_plotoptics</title>
+  <meta name="keywords" content="opt_plotoptics">
+  <meta name="description" content="OPT_PLOTOPTICS - Plot the optical system.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>opt_plotoptics
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>OPT_PLOTOPTICS - Plot the optical system.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function Hs = opt_plotoptics(opt_el,plotmode) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> OPT_PLOTOPTICS - Plot the optical system.
+ 
+ Blue - apertures
+ Green - lens surfaces
+ Red - screens
+ Orange - prisms
+ Yellow - grids
+ 
+ Calling:
+ h = opt_plotoptics(opt_el,plotmode)
+ 
+ Input:
+   PLOTMOE - 3 for 3D, 2 for 2D in X-Z plane -2 for 2D in X-Y
+   plane</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_rot.html" class="code" title="function out_v = opt_rot(in_v,rot_v,theta)">opt_rot</a>	OPT_ROT - rotate vector IN_V THEDA radians around ROT_V</li><li><a href="opt_sphereintersection.html" class="code" title="function [rinter,en] = opt_sphereintersection(rl,e_in,rsf,curvature,lensradius,en)">opt_sphereintersection</a>	OPT_SPHEREINTERSECTION - intersection between a ray and a spherical lens surface</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_exempel.html" class="code" title="">opt_exempel</a>	Example showing the capabilities of Optical_bench:</li><li><a href="opt_exempel2.html" class="code" title="">opt_exempel2</a>	Example of</li><li><a href="opt_exempel3.html" class="code" title="">opt_exempel3</a>	Example of spherical aberation</li><li><a href="opt_exempel5.html" class="code" title="">opt_exempel5</a>	Example of Spherical abberation</li><li><a href="opt_exempel6.html" class="code" title="">opt_exempel6</a>	Example showing Spherical abberation and Coma.</li><li><a href="opt_exmpl_astigmatic.html" class="code" title="">opt_exmpl_astigmatic</a>	Example showing astigmatic aberration</li><li><a href="opt_exmpl_chromatic_ab.html" class="code" title="">opt_exmpl_chromatic_ab</a>	Example showing chromatic aberration</li><li><a href="opt_exmpl_coma.html" class="code" title="">opt_exmpl_coma</a>	Example showing coma (aberration)</li><li><a href="opt_exmpl_field_curv.html" class="code" title="">opt_exmpl_field_curv</a>	Example showing curvature of focus (aberration).</li><li><a href="opt_exmpl_sphere_coma.html" class="code" title="">opt_exmpl_sphere_coma</a>	Example showing spherical aberation and coma</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function Hs = opt_plotoptics(opt_el,plotmode)</a>
+0002 <span class="comment">% OPT_PLOTOPTICS - Plot the optical system.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Blue - apertures</span>
+0005 <span class="comment">% Green - lens surfaces</span>
+0006 <span class="comment">% Red - screens</span>
+0007 <span class="comment">% Orange - prisms</span>
+0008 <span class="comment">% Yellow - grids</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Calling:</span>
+0011 <span class="comment">% h = opt_plotoptics(opt_el,plotmode)</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Input:</span>
+0014 <span class="comment">%   PLOTMOE - 3 for 3D, 2 for 2D in X-Z plane -2 for 2D in X-Y</span>
+0015 <span class="comment">%   plane</span>
+0016 
+0017 <span class="comment">% Version: 1.0</span>
+0018 <span class="comment">% Copyright: Bjorn Gustavsson 20020430</span>
+0019 
+0020 <span class="keyword">persistent</span>  lens_edge
+0021 
+0022 lens_edge = [];
+0023 
+0024 <span class="keyword">if</span> nargin == 1
+0025   plotmode = 3;<span class="comment">%3-D</span>
+0026 <span class="keyword">end</span>
+0027 
+0028 hstate = ishold;
+0029 hold on
+0030 
+0031 
+0032 <span class="keyword">for</span> ii = 1:length(opt_el),
+0033   
+0034   <span class="keyword">switch</span> opt_el(ii).type
+0035    <span class="keyword">case</span> <span class="string">'aperture'</span>
+0036     ex = [1 0 0];
+0037     n = opt_el(ii).n;
+0038     dr = opt_el(ii).diameter/2;
+0039     <span class="comment">%%% FIXA!!! fixat?</span>
+0040     z = (-1.1*dr):dr/50:(1.1*dr);
+0041     z = sign(z).*((abs(z).^.5));
+0042     z = linspace(0,1,30).^.5;
+0043     z = 1.1*dr*[-z(end:-1:2) z];
+0044     <span class="keyword">if</span> ii &lt; length(opt_el)
+0045       <span class="keyword">if</span> length(opt_el(ii+1).diameter)
+0046         z(1) = -abs(opt_el(ii+1).diameter)/2;
+0047         z(end) = abs(opt_el(ii+1).diameter)/2;
+0048       <span class="keyword">else</span>
+0049         z(1) = -max(opt_el(ii+1).dxdydz)/2;
+0050         z(end) = max(opt_el(ii+1).dxdydz)/2;
+0051       <span class="keyword">end</span>
+0052     <span class="keyword">end</span>
+0053     y = z;
+0054     [y,z] = meshgrid(y,z);
+0055     ia = find(y.^2+z.^2&lt;(dr)^2);
+0056     x = zeros(size(y));
+0057     r = [x(:),y(:),z(:)];
+0058     <span class="keyword">if</span> asin(norm(cross(ex,n)))~=0
+0059       <span class="keyword">for</span> jj = 1:length(r)
+0060     r(jj,:) = <a href="opt_rot.html" class="code" title="function out_v = opt_rot(in_v,rot_v,theta)">opt_rot</a>(r(jj,:),cross(ex,n),asin(norm(cross(ex,n))));
+0061       <span class="keyword">end</span>
+0062     <span class="keyword">end</span>
+0063     x(:) = r(:,1)+opt_el(ii).r(1);
+0064     y(:) = r(:,2)+opt_el(ii).r(2);
+0065     z(:) = r(:,3)+opt_el(ii).r(3);
+0066     y(ia) = nan;
+0067     
+0068     <span class="keyword">if</span> plotmode == 3
+0069       Hs(ii).h = surf(x,y,z,zeros(size(z)));
+0070     <span class="keyword">else</span>
+0071       ex = [1 0 0];
+0072       n = opt_el(ii).n;
+0073       dr = opt_el(ii).diameter/2;
+0074       <span class="comment">%%% FIXA!!! fixat?</span>
+0075       z = [-1.1*dr -dr 0  dr 1.1*dr];
+0076       [y,z] = meshgrid(z,z);
+0077       x = zeros(size(y));
+0078       r = [x(:),y(:),z(:)];
+0079       <span class="keyword">if</span> asin(norm(cross(ex,n)))~=0
+0080         <span class="keyword">for</span> jj = 1:length(r)
+0081           r(jj,:) = <a href="opt_rot.html" class="code" title="function out_v = opt_rot(in_v,rot_v,theta)">opt_rot</a>(r(jj,:),cross(ex,n),asin(norm(cross(ex,n))));
+0082         <span class="keyword">end</span>
+0083       <span class="keyword">end</span>
+0084       x(:) = r(:,1)+opt_el(ii).r(1);
+0085       y(:) = r(:,2)+opt_el(ii).r(2);
+0086       z(:) = r(:,3)+opt_el(ii).r(3);
+0087       y(3,3) = nan;
+0088 <span class="comment">% $$$       disp([x(3,:);y(3,:);z(3,:)])</span>
+0089 <span class="comment">% $$$       y(:,3) = nan;</span>
+0090       Hs(ii).h = plot3(x(3,:),y(3,:),z(3,:),x(:,3),y(:,3),z(:,3),<span class="string">'b'</span>);
+0091 <span class="comment">% $$$       keyboard</span>
+0092     <span class="keyword">end</span>
+0093     shading flat
+0094     
+0095    <span class="keyword">case</span> <span class="string">'grid'</span>
+0096     ex = [1 0 0];
+0097     n = opt_el(ii).n;
+0098     dz = opt_el(ii).dxdydz(3);
+0099     dy = opt_el(ii).dxdydz(2);
+0100 
+0101     z = (-dz/2):(dz/2):(dz/2);
+0102     y = (-dy/2):(dy/2):(dy/2);
+0103     [y,z] = meshgrid(y,z);
+0104     x = zeros(size(y));
+0105     r = [x(:),y(:),z(:)];
+0106     <span class="keyword">if</span> asin(norm(cross(ex,n)))~=0
+0107       <span class="keyword">for</span> jj = 1:length(r)
+0108     r(jj,:) = <a href="opt_rot.html" class="code" title="function out_v = opt_rot(in_v,rot_v,theta)">opt_rot</a>(r(jj,:),cross(ex,n),asin(norm(cross(ex,n))));
+0109       <span class="keyword">end</span>
+0110     <span class="keyword">end</span>
+0111     x(:) = r(:,1)+opt_el(ii).r(1);
+0112     y(:) = r(:,2)+opt_el(ii).r(2);
+0113     z(:) = r(:,3)+opt_el(ii).r(3);
+0114     <span class="keyword">if</span> plotmode == 3
+0115       Hs(ii).h = surf(x,y,z,.6*ones(size(z)));shading flat
+0116       plot3([opt_el(ii).r(1)  opt_el(ii).r(1)+opt_el(ii).e_slits(1)],<span class="keyword">...</span>
+0117             [opt_el(ii).r(2)  opt_el(ii).r(2)+opt_el(ii).e_slits(2)],<span class="keyword">...</span>
+0118             [opt_el(ii).r(3)  opt_el(ii).r(3)+opt_el(ii).e_slits(3)],<span class="string">'k'</span>,<span class="string">'linewidth'</span>,6)
+0119     <span class="keyword">else</span>
+0120       Hs(ii).h = plot3([opt_el(ii).r(1)  opt_el(ii).r(1)+opt_el(ii).e_slits(1)],<span class="keyword">...</span>
+0121                       [opt_el(ii).r(2)  opt_el(ii).r(2)+opt_el(ii).e_slits(2)],<span class="keyword">...</span>
+0122                       [opt_el(ii).r(3)  opt_el(ii).r(3)+opt_el(ii).e_slits(3)],<span class="string">'k'</span>,<span class="string">'linewidth'</span>,6);
+0123     <span class="keyword">end</span>
+0124     
+0125    <span class="keyword">case</span> <span class="string">'lens'</span>
+0126     
+0127     ex = [1 0 0];
+0128     n = opt_el(ii).n;
+0129     r = opt_el(ii).diameter/2;
+0130     
+0131     R = 0:r/20:r;
+0132     fi = [0:10:360]*pi/180;
+0133     [fi,R] = meshgrid(fi,R);
+0134     
+0135     y = R.*cos(fi);
+0136     z = R.*sin(fi);
+0137     
+0138 <span class="comment">% $$$     x = -(sign(opt_el(ii).r_o_curv)*(opt_el(ii).r_o_curv^2- ...</span>
+0139 <span class="comment">% $$$                                     y.^2-z.^2).^.5 + ...</span>
+0140 <span class="comment">% $$$           -sign(opt_el(ii).r_o_curv)*(opt_el(ii).r_o_curv^2-4*r^2).^.5);</span>
+0141     x = -sign(opt_el(ii).r_o_curv)*(opt_el(ii).r_o_curv^2- <span class="keyword">...</span>
+0142                                     y.^2-z.^2).^.5;
+0143           <span class="comment">%-sign(opt_el(ii).r_o_curv)*(opt_el(ii).r_o_curv^2-4*r^2).^.5);</span>
+0144 <span class="comment">% $$$     if sign(opt_el(ii).r_o_curv) &gt; 0</span>
+0145 <span class="comment">% $$$       x = x-min(x(:));</span>
+0146 <span class="comment">% $$$     else</span>
+0147 <span class="comment">% $$$       x = x-max(x(:));</span>
+0148 <span class="comment">% $$$     end</span>
+0149     x = x-(x(1,19));
+0150     
+0151     r = [x(:),y(:),z(:)];
+0152     <span class="keyword">if</span> asin(norm(cross(ex,n)))~=0
+0153       [ex,n,cross(ex,n),asin(norm(cross(ex,n)))]
+0154       <span class="keyword">for</span> jj = ib,
+0155     r(jj,:) = <a href="opt_rot.html" class="code" title="function out_v = opt_rot(in_v,rot_v,theta)">opt_rot</a>(r(jj,:),cross(ex,n),asin(norm(cross(ex,n))));
+0156       <span class="keyword">end</span>
+0157     <span class="keyword">end</span>
+0158     x(:) = r(:,1)+opt_el(ii).r(1);
+0159     y(:) = r(:,2)+opt_el(ii).r(2);
+0160     z(:) = r(:,3)+opt_el(ii).r(3);
+0161     x(11,19)
+0162     <span class="comment">%surf(x,y,z,0.5*ones(size(z))),shading flat</span>
+0163 <span class="comment">% $$$     surf(x,y,z,10*(x-min(x(:)))),shading flat</span>
+0164 <span class="comment">% $$$     plot3(x,y,z),shading flat</span>
+0165     <span class="keyword">if</span> ~strcmp(opt_el(ii).glass,<span class="string">'air'</span>)
+0166       lens_edge = [x([end],[1 10 19 28]),y([end],[1 10 19 28]),z([end],[1 10 19 28])];
+0167       lens_edge = reshape(lens_edge,[4 3]);
+0168     <span class="keyword">else</span>
+0169       lens_edge2 = [x([end],[1 10 19 28]),y([end],[1 10 19 28]),z([end],[1 10 19 28])];
+0170       lens_edge2 = reshape(lens_edge2,[4 3]);
+0171       <span class="keyword">switch</span> plotmode
+0172        <span class="keyword">case</span> 3
+0173         plot3([lens_edge(:,1),lens_edge2(:,1)]',[lens_edge(:,2),lens_edge2(:,2)]',[lens_edge(:,3),lens_edge2(:,3)]',<span class="string">'b'</span>)
+0174        <span class="keyword">case</span> 2
+0175         plot3([lens_edge([2 4],1),lens_edge2([2 4],1)]',[lens_edge([2 4],2),lens_edge2([2 4],2)]',[lens_edge([2 4],3),lens_edge2([2 4],3)]',<span class="string">'b'</span>)
+0176        <span class="keyword">case</span> -2
+0177         plot3([lens_edge([1 3],1),lens_edge2([1 3],1)]',[lens_edge([1 3],2),lens_edge2([1 3],2)]',[lens_edge([1 3],3),lens_edge2([1 3],3)]',<span class="string">'b'</span>)
+0178        <span class="keyword">otherwise</span>
+0179         plot3([lens_edge([1 3],1),lens_edge2([1 3],1)]',[lens_edge([1 3],2),lens_edge2([1 3],2)]',[lens_edge([1 3],3),lens_edge2([1 3],3)]',<span class="string">'b'</span>)
+0180       <span class="keyword">end</span>
+0181     <span class="keyword">end</span>
+0182     
+0183     half_end = floor(size(x)/2);
+0184     <span class="keyword">if</span> plotmode == 3
+0185       Hs(ii).h = surf(x,y,z,0.5*ones(size(z)));shading flat
+0186       plot3(x(1:half_end(1),[1 19]),y(1:half_end(1),[1 19]),z(1:half_end(1),[1 19]),<span class="string">'b'</span>);
+0187       plot3(x(1:half_end(1),[10 28]),y(1:half_end(1),[10 28]),z(1:half_end(1),[10 28]),<span class="string">'b'</span>);
+0188       plot3(x(<span class="keyword">end</span>,:),y(<span class="keyword">end</span>,:),z(<span class="keyword">end</span>,:),<span class="string">'b'</span>);
+0189     <span class="keyword">elseif</span> plotmode == 2;
+0190       h = plot3(x(1:<span class="keyword">end</span>,[1 19]),y(1:<span class="keyword">end</span>,[1 19]),z(1:<span class="keyword">end</span>,[1 19]),<span class="string">'b'</span>);
+0191       hh = plot3(x(1:<span class="keyword">end</span>,[10 28]),y(1:<span class="keyword">end</span>,[10 28]),z(1:<span class="keyword">end</span>,[10 28]),<span class="string">'b'</span>);
+0192       hhh = plot3(x(<span class="keyword">end</span>,:),y(<span class="keyword">end</span>,:),z(<span class="keyword">end</span>,:),<span class="string">'b'</span>);
+0193       Hs(ii).h = [h;hh;hhh];
+0194     <span class="keyword">elseif</span> plotmode == -2;
+0195       <span class="comment">%x(11,[10 19 28])</span>
+0196       h = plot3(x(1:<span class="keyword">end</span>,[10 28]),z(1:<span class="keyword">end</span>,[10 28]),y(1:<span class="keyword">end</span>,[10 28]),<span class="string">'b'</span>);
+0197       Hs(ii).h = h;
+0198       <span class="comment">%keyboard</span>
+0199     <span class="keyword">else</span>
+0200       h = plot3(x(1:half_end(1),[1 19]),y(1:half_end(1),[1 19]),z(1:half_end(1),[1 19]),<span class="string">'b'</span>);
+0201       hh = plot3(x(1:half_end(1),[10 28]),y(1:half_end(1),[10 28]),z(1:half_end(1),[10 28]),<span class="string">'b'</span>);
+0202       hhh = plot3(x(<span class="keyword">end</span>,:),y(<span class="keyword">end</span>,:),z(<span class="keyword">end</span>,:),<span class="string">'b'</span>);
+0203       Hs(ii).h = [h;hh;hhh];
+0204     <span class="keyword">end</span>
+0205     
+0206    <span class="keyword">case</span> <span class="string">'lens_cartesian'</span>
+0207     
+0208     ex = [1 0 0];
+0209     n = opt_el(ii).n;
+0210     dz = opt_el(ii).diameter;
+0211     
+0212     z = (-(dz/2)):dz/30:(dz/2);
+0213     y = z;
+0214     [y,z] = meshgrid(y,z);
+0215     ia = find(y.^2+z.^2&gt;=(dz/2)^2);
+0216     y(ia) = nan;
+0217     ib = find(y.^2+z.^2&lt;(dz/2)^2);
+0218     x = zeros(size(y));
+0219     
+0220     x(ib) = -(sign(opt_el(ii).r_o_curv)*(opt_el(ii).r_o_curv^2- <span class="keyword">...</span>
+0221                       y(ib).^2-z(ib).^2).^.5 + <span class="keyword">...</span>
+0222         -sign(opt_el(ii).r_o_curv)*(opt_el(ii).r_o_curv^2-dz^2).^.5);
+0223     <span class="keyword">if</span> sign(opt_el(ii).r_o_curv) &gt; 0
+0224       x(ib) = x(ib)-min(x(ib));
+0225     <span class="keyword">else</span>
+0226       x(ib) = x(ib)-max(x(ib));
+0227     <span class="keyword">end</span>
+0228     r = [x(:),y(:),z(:)];
+0229     <span class="keyword">if</span> asin(norm(cross(ex,n)))~=0
+0230       [ex,n,cross(ex,n),asin(norm(cross(ex,n)))]
+0231       <span class="keyword">for</span> jj = ib,
+0232     r(jj,:) = <a href="opt_rot.html" class="code" title="function out_v = opt_rot(in_v,rot_v,theta)">opt_rot</a>(r(jj,:),cross(ex,n),asin(norm(cross(ex,n))));
+0233       <span class="keyword">end</span>
+0234     <span class="keyword">end</span>
+0235     x(:) = r(:,1)+opt_el(ii).r(1);
+0236     y(:) = r(:,2)+opt_el(ii).r(2);
+0237     z(:) = r(:,3)+opt_el(ii).r(3);
+0238     <span class="keyword">if</span> plotmode == 3
+0239       Hs(ii).h = surf(x,y,z,0.5*ones(size(z)));shading flat
+0240     <span class="keyword">else</span>
+0241       Hs(ii).h = plot3(x(:,16),y(:,16),z(:,16),<span class="string">'b'</span>);
+0242     <span class="keyword">end</span>
+0243     
+0244    <span class="keyword">case</span> <span class="string">'lens_newer'</span>
+0245     
+0246     dl = -opt_el(ii).diameter/2:opt_el(ii).diameter/30:opt_el(ii).diameter/2;
+0247     n = opt_el(ii).n;
+0248     ey = [0 1 0];
+0249     rc = opt_el(ii).r;
+0250     
+0251     <span class="keyword">if</span> dot(n,ey)&gt;1-100*eps
+0252       e1 = cross(n,ey);
+0253       e1 = e1/norm(e1);
+0254       e2 = cross(n,e1);
+0255     <span class="keyword">else</span>
+0256       e1 = cross(n,[0 0 1]);
+0257       e1 = e1/norm(e1);
+0258       e2 = cross(n,e1);
+0259     <span class="keyword">end</span>
+0260     x = nan*zeros([length(dl) length(dl)]);
+0261     y = x;
+0262     z = x;
+0263     <span class="comment">%dl(16)</span>
+0264     <span class="keyword">for</span> li1 =1:length(dl),
+0265       <span class="keyword">for</span> li2 = 1:length(dl),
+0266         rinter = rc + e1*dl(li1) + e2*dl(li2);
+0267         rinter = <a href="opt_sphereintersection.html" class="code" title="function [rinter,en] = opt_sphereintersection(rl,e_in,rsf,curvature,lensradius,en)">opt_sphereintersection</a>(rinter,<span class="keyword">...</span>
+0268                                         opt_el(ii).n,<span class="keyword">...</span>
+0269                                         opt_el(ii).r+opt_el(ii).r_o_curv*opt_el(ii).n,<span class="keyword">...</span>
+0270                                         opt_el(ii).r_o_curv,<span class="keyword">...</span>
+0271                                         opt_el(ii).diameter/2,<span class="keyword">...</span>
+0272                                         opt_el(ii).n);
+0273         <span class="keyword">if</span> length(rinter)
+0274           x(li2,li1) = rinter(1);
+0275           y(li2,li1) = rinter(2);
+0276           z(li2,li1) = rinter(3);
+0277         <span class="keyword">end</span>
+0278       <span class="keyword">end</span>
+0279     <span class="keyword">end</span>
+0280     <span class="comment">%surf(x,y,z,0.5*ones(size(z))),shading flat</span>
+0281     <span class="keyword">if</span> plotmode == 3
+0282       Hs(ii).h = surf(x,y,z,0.5*ones(size(z)));shading flat
+0283     <span class="keyword">else</span>
+0284       Hs(ii).h = plot3(x(16,:),y(16,:),z(16,:),x(:,16),y(:,16),z(:,16),<span class="string">'b'</span>);
+0285     <span class="keyword">end</span>
+0286     
+0287     
+0288    <span class="keyword">case</span> <span class="string">'prism'</span>
+0289     ex = [1 0 0];
+0290     n = opt_el(ii).n;
+0291     dz = opt_el(ii).dxdydz(3);
+0292     dy = opt_el(ii).dxdydz(2);
+0293     z = (-dz/2):(dz/2):(dz/2);
+0294     y = (-dy/2):(dy/2):(dy/2);
+0295     [y,z] = meshgrid(y,z);
+0296     x = zeros(size(y));
+0297     r = [x(:),y(:),z(:)];
+0298     <span class="keyword">if</span> asin(norm(cross(ex,n)))~=0
+0299       <span class="keyword">for</span> jj = 1:length(r)
+0300     r(jj,:) = <a href="opt_rot.html" class="code" title="function out_v = opt_rot(in_v,rot_v,theta)">opt_rot</a>(r(jj,:),cross(ex,n),asin(norm(cross(ex,n))));
+0301       <span class="keyword">end</span>
+0302     <span class="keyword">end</span>
+0303     x(:) = r(:,1)+opt_el(ii).r(1);
+0304     y(:) = r(:,2)+opt_el(ii).r(2);
+0305     z(:) = r(:,3)+opt_el(ii).r(3);
+0306     <span class="keyword">if</span> plotmode == 3
+0307       Hs(ii).h = surf(x,y,z,0.7*ones(size(z)));shading flat
+0308     <span class="keyword">else</span>
+0309       Hs(ii).h = plot3(x,y,z,<span class="string">'r'</span>);shading flat
+0310     <span class="keyword">end</span>
+0311    <span class="keyword">case</span> <span class="string">'screen'</span>
+0312     ex = [1 0 0];
+0313     n = opt_el(ii).n;
+0314     dz = opt_el(ii).dxdydz(3);
+0315     dy = opt_el(ii).dxdydz(2);
+0316     z = (-dz/2):(dz/2):(dz/2);
+0317     y = (-dy/2):(dy/2):(dy/2);
+0318     [y,z] = meshgrid(y,z);
+0319     x = zeros(size(y));
+0320     r = [x(:),y(:),z(:)];
+0321     <span class="keyword">if</span> asin(norm(cross(ex,n)))~=0
+0322       <span class="keyword">for</span> jj = 1:length(r)
+0323     r(jj,:) = <a href="opt_rot.html" class="code" title="function out_v = opt_rot(in_v,rot_v,theta)">opt_rot</a>(r(jj,:),cross(ex,n),asin(norm(cross(ex,n))));
+0324       <span class="keyword">end</span>
+0325     <span class="keyword">end</span>
+0326     x(:) = r(:,1)+opt_el(ii).r(1);
+0327     y(:) = r(:,2)+opt_el(ii).r(2);
+0328     z(:) = r(:,3)+opt_el(ii).r(3);
+0329     <span class="keyword">if</span> plotmode == 3
+0330       Hs(ii).h = surf(x,y,z,ones(size(z)));shading flat
+0331       plot3(x(1,:),<span class="keyword">...</span>
+0332             y(1,:),<span class="keyword">...</span>
+0333             z(1,:),<span class="string">'b'</span>,<span class="keyword">...</span>
+0334             x(:,1),<span class="keyword">...</span>
+0335             y(:,1),<span class="keyword">...</span>
+0336             z(:,1),<span class="string">'b'</span>,<span class="keyword">...</span>
+0337             x(<span class="keyword">end</span>,:),<span class="keyword">...</span>
+0338             y(<span class="keyword">end</span>,:),<span class="keyword">...</span>
+0339             z(<span class="keyword">end</span>,:),<span class="string">'b'</span>,<span class="keyword">...</span>
+0340             x(:,end),<span class="keyword">...</span>
+0341             y(:,end),<span class="keyword">...</span>
+0342             z(:,end),<span class="string">'b'</span>,<span class="string">'linewidth'</span>,1);
+0343     <span class="keyword">else</span>
+0344       Hs(ii).h = plot3(x(1,:),<span class="keyword">...</span>
+0345                       y(1,:),<span class="keyword">...</span>
+0346                       z(1,:),<span class="string">'b'</span>,<span class="keyword">...</span>
+0347                       x(:,1),<span class="keyword">...</span>
+0348                       y(:,1),<span class="keyword">...</span>
+0349                       z(:,1),<span class="string">'b'</span>,<span class="keyword">...</span>
+0350                       x(<span class="keyword">end</span>,:),<span class="keyword">...</span>
+0351                       y(<span class="keyword">end</span>,:),<span class="keyword">...</span>
+0352                       z(<span class="keyword">end</span>,:),<span class="string">'b'</span>,<span class="keyword">...</span>
+0353                       x(:,end),<span class="keyword">...</span>
+0354                       y(:,end),<span class="keyword">...</span>
+0355                       z(:,end),<span class="string">'b'</span>,<span class="string">'linewidth'</span>,1);
+0356     <span class="keyword">end</span>
+0357     
+0358    <span class="keyword">case</span> <span class="string">'slit'</span>
+0359     ex = [1 0 0];
+0360     n = opt_el(ii).n;
+0361     dz = opt_el(ii).dxdydz(3)+2;
+0362     dy = opt_el(ii).dxdydz(2)+2;
+0363     z = (-dz/2):(dz/2):(dz/2);
+0364     y = (-dy/2):(dy/2):(dy/2);
+0365     [y,z] = meshgrid(y,z);
+0366     x = zeros(size(y));
+0367     r = [x(:),y(:),z(:)];
+0368     <span class="keyword">if</span> asin(norm(cross(ex,n)))~=0
+0369       <span class="keyword">for</span> jj = 1:length(r)
+0370     r(jj,:) = <a href="opt_rot.html" class="code" title="function out_v = opt_rot(in_v,rot_v,theta)">opt_rot</a>(r(jj,:),cross(ex,n),asin(norm(cross(ex,n))));
+0371       <span class="keyword">end</span>
+0372     <span class="keyword">end</span>
+0373     x(:) = r(:,1)+opt_el(ii).r(1);
+0374     y(:) = r(:,2)+opt_el(ii).r(2);
+0375     z(:) = r(:,3)+opt_el(ii).r(3);
+0376     size(x)
+0377     <span class="keyword">if</span> plotmode == 3
+0378       Hs(ii).h = surf(x,y,z,.9*ones(size(z)));shading flat
+0379     <span class="keyword">else</span>
+0380       Hs(ii).h = plot3([x(1,1) x(1,end) x(<span class="keyword">end</span>,end) x(<span class="keyword">end</span>,1) x(1,1)],<span class="keyword">...</span>
+0381                       [y(1,1) y(1,end) y(<span class="keyword">end</span>,end) y(<span class="keyword">end</span>,1) y(1,1)],<span class="keyword">...</span>
+0382                       [z(1,1) z(1,end) z(<span class="keyword">end</span>,end) z(<span class="keyword">end</span>,1) z(1,1)]);
+0383     <span class="keyword">end</span>
+0384     ex = [1 0 0];
+0385     n = opt_el(ii).n;
+0386     dz = opt_el(ii).dxdydz(3);
+0387     dy = opt_el(ii).dxdydz(2);
+0388     z = (-dz/2):(dz/2):(dz/2);
+0389     y = (-dy/2):(dy/2):(dy/2);
+0390     [y,z] = meshgrid(y,z);
+0391     x = zeros(size(y));
+0392     r = [x(:),y(:),z(:)];
+0393     <span class="keyword">if</span> asin(norm(cross(ex,n)))~=0
+0394       <span class="keyword">for</span> jj = 1:length(r)
+0395     r(jj,:) = <a href="opt_rot.html" class="code" title="function out_v = opt_rot(in_v,rot_v,theta)">opt_rot</a>(r(jj,:),cross(ex,n),asin(norm(cross(ex,n))));
+0396       <span class="keyword">end</span>
+0397     <span class="keyword">end</span>
+0398     x(:) = r(:,1)+opt_el(ii).r(1);
+0399     y(:) = r(:,2)+opt_el(ii).r(2);
+0400     z(:) = r(:,3)+opt_el(ii).r(3);
+0401     plot3(x,y,z,<span class="string">'k'</span>),shading flat
+0402     plot3(x',y',z',<span class="string">'k'</span>),shading flat
+0403     
+0404    <span class="keyword">otherwise</span>
+0405     feval(opt_el(ii).fcn2,[1 1 1],<span class="string">'p'</span>,opt_el(ii).arglist);
+0406   <span class="keyword">end</span>
+0407 
+0408 <span class="keyword">end</span>
+0409 
+0410 <span class="keyword">if</span> ~hstate
+0411   
+0412   hold off
+0413   
+0414 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

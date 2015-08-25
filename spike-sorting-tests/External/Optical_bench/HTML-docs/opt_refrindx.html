@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of opt_refrindx</title>
+  <meta name="keywords" content="opt_refrindx">
+  <meta name="description" content="OPT_REFRINDX refractive index calculations.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>opt_refrindx
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>OPT_REFRINDX refractive index calculations.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function n = opt_refrindx(glass,wavelength) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> OPT_REFRINDX refractive index calculations.
+ GLASS - name of glass type, WAVELENGTH in meters.
+ Data from JML Optical Industries, Inc available at:
+   http://www.netacc.net/~jmlopt/transmission2.html
+   Or at:
+   http://www.jmlopt.com/level2/TechInfo/materialstable.aspx
+ and
+
+ Calling:
+ n = opt_refrindx(glass,wavelength)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_exempel6.html" class="code" title="">opt_exempel6</a>	Example showing Spherical abberation and Coma.</li><li><a href="opt_exmpl_astigmatic.html" class="code" title="">opt_exmpl_astigmatic</a>	Example showing astigmatic aberration</li><li><a href="opt_exmpl_coma.html" class="code" title="">opt_exmpl_coma</a>	Example showing coma (aberration)</li><li><a href="opt_exmpl_field_curv.html" class="code" title="">opt_exmpl_field_curv</a>	Example showing curvature of focus (aberration).</li><li><a href="opt_exmpl_sphere_coma.html" class="code" title="">opt_exmpl_sphere_coma</a>	Example showing spherical aberation and coma</li><li><a href="opt_refraction.html" class="code" title="function [en,refraction_loss,n_refr,phase_shift] = opt_refraction(r_int,ray,optelem)">opt_refraction</a>	OPT_REFRACTION - calculation of optical refraction - Snells law.</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function n = opt_refrindx(glass,wavelength)</a>
+0002 <span class="comment">% OPT_REFRINDX refractive index calculations.</span>
+0003 <span class="comment">% GLASS - name of glass type, WAVELENGTH in meters.</span>
+0004 <span class="comment">% Data from JML Optical Industries, Inc available at:</span>
+0005 <span class="comment">%   http://www.netacc.net/~jmlopt/transmission2.html</span>
+0006 <span class="comment">%   Or at:</span>
+0007 <span class="comment">%   http://www.jmlopt.com/level2/TechInfo/materialstable.aspx</span>
+0008 <span class="comment">% and</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Calling:</span>
+0011 <span class="comment">% n = opt_refrindx(glass,wavelength)</span>
+0012 <span class="comment">%</span>
+0013 
+0014 <span class="comment">% Copyright B. Gustavsson 20050804</span>
+0015 
+0016 <span class="keyword">persistent</span> glass_names_sellmeier refr_consts_sellmeier
+0017 
+0018 <span class="keyword">if</span> isempty(glass_names_sellmeier)
+0019   
+0020   qwe = <span class="string">''</span>;
+0021   fp = fopen(<span class="string">'Sellmeier.glass.refr'</span>,<span class="string">'r'</span>);
+0022   <span class="keyword">while</span> ~feof(fp)
+0023     qwe = str2mat(qwe,fgetl(fp));
+0024   <span class="keyword">end</span>
+0025   glass_names_sellmeier = qwe(3:<span class="keyword">end</span>,1:7);
+0026   refr_consts_sellmeier = str2num(qwe(3:<span class="keyword">end</span>,8:end));
+0027   
+0028 <span class="keyword">end</span>
+0029 
+0030 lambda_ref = [5876 4861 6563]*1e-10;
+0031 
+0032 I = strmatch(glass,glass_names_sellmeier);
+0033 <span class="keyword">if</span> ~isempty(I)
+0034   lambda = wavelength*1e6; <span class="comment">% change units to micrometer</span>
+0035   A = refr_consts_sellmeier(I,1:3);
+0036   B = refr_consts_sellmeier(I,4:6);
+0037   n = sqrt(1+A(1)*lambda.^2./(lambda.^2-B(1)) + A(2)*lambda.^2./(lambda.^2-B(2))+A(3)*lambda.^2./(lambda.^2-B(3)));
+0038 <span class="keyword">else</span>
+0039   <span class="keyword">switch</span> lower(glass)
+0040    <span class="keyword">case</span> <span class="string">'air'</span>
+0041     nref = [1 1 1];
+0042    <span class="keyword">case</span> <span class="string">'acrylic'</span>
+0043     nref = [1.491 1.496 1.488];
+0044    <span class="keyword">case</span> <span class="string">'b270'</span>
+0045     nref = [1.5230 1.5292 1.5202];
+0046    <span class="keyword">case</span> <span class="string">'bak1'</span>
+0047     nref = [1.5725 1.5794 1.5694];
+0048    <span class="keyword">case</span> <span class="string">'bak2'</span>
+0049     nref = [1.5399 1.5462 1.5372];
+0050    <span class="keyword">case</span> <span class="string">'bak4'</span>
+0051     nref = [1.56883 1.5759 1.56576];
+0052    <span class="keyword">case</span> <span class="string">'balkn3'</span>
+0053     nref = [1.51849 1.52447 1.51586];
+0054    <span class="keyword">case</span> <span class="string">'bk7'</span>
+0055     nref = [1.5168 1.5224 1.5143];
+0056    <span class="keyword">case</span> <span class="string">'f2'</span>
+0057     nref = [1.6200 1.6320 1.6150];
+0058    <span class="keyword">case</span> <span class="string">'f3'</span>
+0059     nref = [1.61293 1.62461 1.60806];
+0060    <span class="keyword">case</span> <span class="string">'f4'</span>
+0061     nref = [1.6165 1.6284 1.6116];
+0062    <span class="keyword">case</span> <span class="string">'fusedsilica'</span>
+0063     nref = [1.458 1.463 1.456];
+0064    <span class="keyword">case</span> <span class="string">'k5'</span>
+0065     nref = [1.5224 1.5285 1.5198];
+0066    <span class="keyword">case</span> <span class="string">'k7'</span>
+0067     nref = [1.51112 1.517 1.50854];
+0068    <span class="keyword">case</span> <span class="string">'lasfn9'</span>
+0069     nref = [1.850 1.8689 1.8425];
+0070    <span class="keyword">case</span> <span class="string">'lah71'</span>
+0071     nref = [1.8502 1.8689 1.8425];
+0072    <span class="keyword">case</span> <span class="string">'pyrex'</span>
+0073     nref = [1.473 1.478 1.471];
+0074    <span class="keyword">case</span> <span class="string">'sapphire'</span>
+0075     nref = [1.7682 1.7756 1.7649];
+0076    <span class="keyword">case</span> <span class="string">'sf1'</span>
+0077     nref = [1.71736 1.73462 1.71031];
+0078    <span class="keyword">case</span> <span class="string">'sf2'</span>
+0079     nref = [1.6476 1.6612 1.6421];
+0080    <span class="keyword">case</span> <span class="string">'sf5'</span>
+0081     nref = [1.6727 1.6875 1.66661];
+0082    <span class="keyword">case</span> <span class="string">'sf8'</span>
+0083     nref = [1.6889 1.7046 1.6825];
+0084    <span class="keyword">case</span> <span class="string">'sf10'</span>
+0085     nref = [1.72825 1.74648 1.72085];
+0086    <span class="keyword">case</span> <span class="string">'sf11'</span>
+0087     nref = [1.7847 1.8064 1.7759];
+0088    <span class="keyword">case</span> <span class="string">'sf12'</span>
+0089     nref = [1.64831 1.66187 1.64271];
+0090    <span class="keyword">case</span> <span class="string">'sf15'</span>
+0091     nref = [1.69895 1.71546 1.69221];
+0092    <span class="keyword">case</span> <span class="string">'sf18'</span>
+0093     nref = [1.7215 1.7390 1.7143];
+0094    <span class="keyword">case</span> <span class="string">'sf19'</span>
+0095     nref = [1.6668 1.6811 1.6609];
+0096    <span class="keyword">case</span> <span class="string">'sf56'</span>
+0097     nref = [1.7847 1.8061 1.7760];
+0098    <span class="keyword">case</span> <span class="string">'sk3'</span>
+0099     nref = [1.6088 1.6160 1.6056];
+0100    <span class="keyword">case</span> <span class="string">'sk5'</span>
+0101     nref = [1.5891 1.5958 1.5861];
+0102    <span class="keyword">case</span> <span class="string">'sk11'</span>
+0103     nref = [1.5638 1.5702 1.5610];
+0104    <span class="keyword">case</span> <span class="string">'sk16'</span>
+0105     nref = [1.6204 1.6275 1.6172];
+0106    <span class="keyword">case</span> <span class="string">'ssk2'</span>
+0107     nref = [1.6223 1.63048 1.61878];
+0108    <span class="keyword">case</span> <span class="string">'ssk4a'</span>
+0109     nref = [1.61765 1.62547 1.61427];
+0110    <span class="keyword">case</span> <span class="string">'ssk51'</span>
+0111     nref = [1.60361 1.61147 1.60022];
+0112    <span class="keyword">case</span> <span class="string">'zk5'</span>
+0113     nref = [1.53375 1.54049 1.53084];
+0114    <span class="keyword">otherwise</span>
+0115     lambda = [0 10000]*1e-9;
+0116     alpha = [0 0];
+0117     warning([<span class="string">'No values for glass absorption for: '</span>,glass])
+0118   <span class="keyword">end</span>
+0119   [abc,S,Mu] = polyfit(1./lambda_ref.^2,nref,2);
+0120   n = polyval(abc,1./wavelength.^2,[],Mu);
+0121   
+0122 <span class="keyword">end</span>
+0123</pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

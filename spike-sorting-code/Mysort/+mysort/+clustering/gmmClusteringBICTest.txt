@@ -1,0 +1,3 @@
+# Cluster: 10, min(AIC): 10, min(BIC): 10
+Elem in Cluster:    66    96   252    71   321   113    68   184   330    80 
+Elem clustered:    318   252    49    72    73   114   330    95   213    65

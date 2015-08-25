@@ -1,0 +1,94 @@
+This is version 0.3 of the "Discriminant Analysis Toolbox" with major
+bug fixes from the first and second versions and with the addition of
+logistic discriminant anlsyis and multinomial classification
+feed-forward neural-network.
+
+To install, place the class directories starting with '@' somewhere in
+your MATLAB path along with the other .m files listed below.
+
+This is a series of .m files implementing linear, quadratic and
+logistic discriminant analysis and classification generally following
+the text [1]. 
+
+References: 
+[1] B. D. Ripley (1996) Pattern Classification and Neural
+   Networks. Cambridge.
+
+The following files are included:
+   Contents.m          - Contents file
+   README              - This file
+
+   Parent classifier object:
+   @classifier/classifier.m - Null classifier
+   @classifier/classify.m   - Classify with null classifier
+   @classifier/disp.m       - Display CLASSIFIER object
+   @classifier/display.m    - Display CLASSIFIER object
+   @classifier/subsref.m    - Access fields of CLASSIFIER object
+
+   Linear discriminant analysis:
+   @lda/classify.m          - Classify with linear discriminants
+   @lda/cov.m               - Within-groups covariance matrix
+   @lda/cvar.m              - Canonical variates
+   @lda/disp.m              - Display LDA object
+   @lda/display.m           - Display LDA object
+   @lda/lda.m               - Linear discriminant analysis
+   @lda/plotcov.m           - Plot covariance ellipsoids
+   @lda/shrink.m            - Shrink covariance matrix
+   @lda/subsref.m           - Access fields of LDA object
+
+   Logistic discriminant analysis:
+   @logda/classify.m        - Classify with logistic discriminants
+   @logda/disp.m            - Display LOGDA object
+   @logda/display.m         - Display LOGDA object
+   @logda/logda.m           - Logistic discriminant analysis
+   @logda/subsref.m         - Access fields of LOGDA object
+
+   Quadratic discriminant analysis:
+   @qda/classify.m          - Classify with quadratic discriminants
+   @qda/cov.m               - Within-groups covariance matrices
+   @qda/disp.m              - Display QDA object
+   @qda/display.m           - Display QDA object
+   @qda/plotcov.m           - Plot covariance ellipsoids
+   @qda/qda.m               - Quadratic discriminant analysis
+   @qda/shrink.m            - Shrink covariance matrices
+   @qda/subsref.m           - Access fields of QDA object
+
+   Multinomial feed-formward neural network:
+   @softmax/classify.m      - Classify with logistic discriminants
+   @softmax/disp.m          - Display LOGDA object
+   @softmax/display.m       - Display LOGDA object
+   @softmax/logda.m         - Logistic discriminant analysis
+   @softmax/subsref.m       - Access fields of LOGDA object
+   
+   Other .m files:
+   confmat.m                - Confusion matrix
+   crossval.m               - Cross-validation classification
+   kmeans.m                 - K-means clustering
+   mahalanobis.m            - Mahalanobis distance
+   mcnemar.m                - McNemar tests
+   parseopt.m               - Get options from struct
+   plotdr.m                 - Plot decision regions
+   plotobs.m                - Observation scatter plot
+
+There are examples of how to use some of these function in the help
+for LDA, QDA and LOGDA. Hopefully, this should be enought to get you
+started.
+
+The .m files have been tested on MATLAB version 5.3 and definitely
+won't work on anything prior to 5.0.
+
+This is a work in progress, so if you have any comments or suggestions
+feel free to send me an e-mail.
+
+-- Michael Kiefte, June 3, 1999.
+
+Contact Information:
+
+Michael Kiefte                 e-mail: mkiefte@gpu.srv.ualberta.ca
+Department of Linguistics      tel:    +1 780 492 0804
+4-32 Assiniboia Hall           fax:    +1 780 492 0806
+University of Alberta
+Edmonton, Alberta
+T6G 2E7 Canada
+
+$Log$

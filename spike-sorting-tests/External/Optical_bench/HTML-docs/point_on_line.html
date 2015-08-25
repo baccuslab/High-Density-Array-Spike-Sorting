@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of point_on_line</title>
+  <meta name="keywords" content="point_on_line">
+  <meta name="description" content="POINT_ON_LINE  - calculates the vector to a point">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>point_on_line
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>POINT_ON_LINE  - calculates the vector to a point</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function  [r_out] = point_on_line(r_0,e_l,l); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> POINT_ON_LINE  - calculates the vector to a point
+ R_OUT that are L away from R_0 in the direction
+ E_L.
+ 
+ Calling:
+ [r_out] = poin_on_line(r_0,e_l,l);</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="grating_fig.html" class="code" title="">grating_fig</a>	</li><li><a href="opt_intersection.html" class="code" title="function rinter = opt_intersection(optelem,rayin)">opt_intersection</a>	OPT_INTERSECTION - Determine the impact point of an optical</li><li><a href="opt_sphereintersection.html" class="code" title="function [rinter,en] = opt_sphereintersection(rl,e_in,rsf,curvature,lensradius,en)">opt_sphereintersection</a>	OPT_SPHEREINTERSECTION - intersection between a ray and a spherical lens surface</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function  [r_out] = point_on_line(r_0,e_l,l);</a>
+0002 <span class="comment">% POINT_ON_LINE  - calculates the vector to a point</span>
+0003 <span class="comment">% R_OUT that are L away from R_0 in the direction</span>
+0004 <span class="comment">% E_L.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Calling:</span>
+0007 <span class="comment">% [r_out] = poin_on_line(r_0,e_l,l);</span>
+0008 <span class="comment">%</span>
+0009 
+0010 <span class="comment">%       Bjorn Gustavsson</span>
+0011 <span class="comment">%    Copyright (c) 1997 by Bjorn Gustavsson</span>
+0012 <span class="comment">%    $Revision: 1.1 $  $Date: 1997/12/17 15:08:28 $</span>
+0013 
+0014 <span class="comment">%</span>
+0015 <span class="comment">%       $Log: point_on_line.m,v $</span>
+0016 <span class="comment">%       Revision 1.1  1997/12/17 15:08:28  bjorn</span>
+0017 <span class="comment">%       Initial revision</span>
+0018 <span class="comment">%</span>
+0019 
+0020 r_out = r_0+l*e_l;</pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

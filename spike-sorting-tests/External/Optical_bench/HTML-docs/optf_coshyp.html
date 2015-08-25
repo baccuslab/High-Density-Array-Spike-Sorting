@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of optf_coshyp</title>
+  <meta name="keywords" content="optf_coshyp">
+  <meta name="description" content="OPTF_HYPERBOLC defines a cosh lens surface">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>optf_coshyp
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>OPTF_HYPERBOLC defines a cosh lens surface</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function out_arg = optf_coshyp(r,s_or_n_or_p,arglist) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> OPTF_HYPERBOLC defines a cosh lens surface
+ Called with optf_hyperbolic(R,'s',arglist) the function should
+ return 0 (zero) when R is on the lens surface and monotonically
+ growing scalars when R deviates. When R is outside the lens area
+ but on the analytical extension of the lens surface the function
+ should return a scalar smaller than -2eps or larger than 2eps.
+ Called with  optf_hyperbolic(R,'n',arglist) the functnion should
+ return the normal of the lens surface. If you want the surface to
+ appear in a plot of the optics the function should respond with a
+ proper surface plot when called with
+ optf_hyperbolic(R,'p',arglist) ARGLIST will be a struct as
+ produced by OPT_FCN.
+
+ Calling:
+ function out_arg = optf_hyperbolic(r,s_or_n,arglist)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function out_arg = optf_coshyp(r,s_or_n_or_p,arglist)</a>
+0002 <span class="comment">% OPTF_HYPERBOLC defines a cosh lens surface</span>
+0003 <span class="comment">% Called with optf_hyperbolic(R,'s',arglist) the function should</span>
+0004 <span class="comment">% return 0 (zero) when R is on the lens surface and monotonically</span>
+0005 <span class="comment">% growing scalars when R deviates. When R is outside the lens area</span>
+0006 <span class="comment">% but on the analytical extension of the lens surface the function</span>
+0007 <span class="comment">% should return a scalar smaller than -2eps or larger than 2eps.</span>
+0008 <span class="comment">% Called with  optf_hyperbolic(R,'n',arglist) the functnion should</span>
+0009 <span class="comment">% return the normal of the lens surface. If you want the surface to</span>
+0010 <span class="comment">% appear in a plot of the optics the function should respond with a</span>
+0011 <span class="comment">% proper surface plot when called with</span>
+0012 <span class="comment">% optf_hyperbolic(R,'p',arglist) ARGLIST will be a struct as</span>
+0013 <span class="comment">% produced by OPT_FCN.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Calling:</span>
+0016 <span class="comment">% function out_arg = optf_hyperbolic(r,s_or_n,arglist)</span>
+0017 
+0018 
+0019 <span class="comment">% parsing of the arglist structure.</span>
+0020 r0 = arglist.r0;                  <span class="comment">% The lenssurface reference point</span>
+0021 lens_rot = arglist.rotmat;        <span class="comment">% Rotation matrix of the lens</span>
+0022 f = arglist.focals;               <span class="comment">% The shape parameters</span>
+0023 lens_diameter = arglist.diameter; <span class="comment">% Diameter of the lens.</span>
+0024 
+0025 r = lens_rot'*(r-r0)';
+0026 
+0027 <span class="keyword">switch</span> s_or_n_or_p
+0028  <span class="keyword">case</span> <span class="string">'s'</span>
+0029   <span class="comment">% calculate the some distance between r and the surface</span>
+0030   <span class="comment">% equation for the surface f(x,y,z) = 0</span>
+0031   out_arg = abs(f(3)*(cosh((r(2).^2/f(1).^2+r(3).^2/f(2).^2).^.5)-1)-r(1));
+0032   <span class="keyword">if</span> r(1)^2+r(2)^2 &gt; lens_diameter^2/4;
+0033     out_arg = out_arg+1;
+0034   <span class="keyword">end</span>
+0035  <span class="keyword">case</span> <span class="string">'n'</span>
+0036   <span class="comment">% calculate the surface normal at point r</span>
+0037   <span class="comment">% The surface normal is -grad(f)</span>
+0038   out_arg = [-1 <span class="keyword">...</span>
+0039              f(3)*r(2)/f(1)^2./((r(2).^2/f(1).^2+r(3).^2/f(2).^2).^.5)*sinh((r(2).^2/f(1).^2+r(3).^2/f(2).^2).^.5) <span class="keyword">...</span>
+0040              f(3)*r(3)/f(2)^2./((r(2).^2/f(1).^2+r(3).^2/f(2).^2).^.5)*sinh((r(2).^2/f(1).^2+r(3).^2/f(2).^2).^.5)];
+0041   out_arg = -out_arg/norm(out_arg);
+0042  <span class="keyword">case</span> <span class="string">'p'</span>
+0043   <span class="comment">% plot the surface</span>
+0044   y = -lens_diameter/2:lens_diameter/40:lens_diameter/2;
+0045   z = -lens_diameter/2:lens_diameter/40:lens_diameter/2;
+0046   [y,z] = meshgrid(y,z);
+0047   x = f(3)*(cosh((y.^2/f(1).^2+z.^2/f(2)^2).^.5)-1);
+0048   R = [x(:) y(:) z(:)];
+0049   ii = find(R(:,2).^2+R(:,3).^2&gt;lens_diameter^2/4);
+0050   R(ii,1) = nan;
+0051   R(ii,2) = nan;
+0052   R(ii,3) = nan;
+0053   R = lens_rot'*R';
+0054   
+0055   x(:) = R(1,:)+r0(1);
+0056   y(:) = R(2,:)+r0(2);
+0057   z(:) = R(3,:)+r0(3);
+0058   <span class="comment">%outarg needs to be set, and what more apropriate then the handle?</span>
+0059   out_arg = surf(x,y,z,ones(size(z))*rand(1));
+0060   shading faceted;
+0061  <span class="keyword">otherwise</span>
+0062   error(<span class="string">'Value of s_or_n_or_p ('</span>,s_or_n_or_p,<span class="string">') out of range (''s'',''n'',''p'')'</span>)
+0063 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

@@ -1,0 +1,8 @@
+A) RUN setup.m
+OR
+B)
+1. Put this folder on the matlab path
+2. Put the folder dataviewerpackage on the matlab path
+3. Put the folder mysortpackage on the matlab path
+
+Done.

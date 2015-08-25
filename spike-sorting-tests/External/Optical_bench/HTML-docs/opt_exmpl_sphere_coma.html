@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of opt_exmpl_sphere_coma</title>
+  <meta name="keywords" content="opt_exmpl_sphere_coma">
+  <meta name="description" content="Example showing spherical aberation and coma">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>opt_exmpl_sphere_coma
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Example showing spherical aberation and coma</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Example showing spherical aberation and coma</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_build.html" class="code" title="function opt_elems = opt_build(file)">opt_build</a>	OPT_BUILD - Builds optical system specified in FILE</li><li><a href="opt_f_of_r1nr2zc.html" class="code" title="function f = opt_f_of_r1nr2zc(r1,n,r2,zc)">opt_f_of_r1nr2zc</a>	OPT_R2_OF_FNR1_THICK - second radii of curvature given F, N R1 and ZC, thick lens</li><li><a href="opt_plotoptics.html" class="code" title="function Hs = opt_plotoptics(opt_el,plotmode)">opt_plotoptics</a>	OPT_PLOTOPTICS - Plot the optical system.</li><li><a href="opt_project_direction.html" class="code" title="function opt_el = opt_project_direction(e,I,wavelengths,opt_el,opt_ops)">opt_project_direction</a>	OPT_PROJECT_POINT - Project light from direction E with intensity I throug OPT_EL</li><li><a href="opt_r2_of_fnr1_thick.html" class="code" title="function r2 = opt_r2_of_fnr1_thick(f,n,r1,zc)">opt_r2_of_fnr1_thick</a>	r2 = opt_r2_of_fnr1_thick(f,n,r1,zc)</li><li><a href="opt_ray.html" class="code" title="function ray = opt_ray()">opt_ray</a>	OPT_RAY - RAY creator for OPT_TOOLS</li><li><a href="opt_refrindx.html" class="code" title="function n = opt_refrindx(glass,wavelength)">opt_refrindx</a>	OPT_REFRINDX refractive index calculations.</li><li><a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">opt_trace</a>	OPT_TRACE - ray tracing through optical systems.</li><li><a href="opt_vini.html" class="code" title="function vini = opt_vini(r1,r2,ng,zc)">opt_vini</a>	OPT_VINI - Rear nodal point distance from rear vertex of thick lens</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Example showing spherical aberation and coma</span>
+0002 
+0003 <span class="comment">% Set the options for ploting of the optics/raytracing</span>
+0004 opt_ops.plotrays=0; <span class="comment">% plot the individual rays</span>
+0005 opt_ops.plotpaus=0; <span class="comment">% do not pause after each  ray intersection</span>
+0006 opt_ops.plotRT = 0; <span class="comment">% do not ``drawnow'' after each ray intersection</span>
+0007 <span class="comment">% $$$ opt_ops.test = 6; % quick projection calculation</span>
+0008 
+0009 opt_ops2.plotrays=1; <span class="comment">% plot the individual rays</span>
+0010 opt_ops2.plotpaus=0; <span class="comment">% do not pause after each  ray intersection</span>
+0011 opt_ops2.plotRT = 0; <span class="comment">% do not ``drawnow'' after each ray intersection</span>
+0012 
+0013 ray = <a href="opt_ray.html" class="code" title="function ray = opt_ray()">opt_ray</a>;
+0014 
+0015 nr_rays = 18;
+0016 
+0017 clrs = jet(9);
+0018 
+0019 <span class="keyword">for</span> ray_i = 2:nr_rays,
+0020   
+0021   fi_of_i = atan(2/20-ray_i/100);
+0022   
+0023   rays(ray_i) = ray;
+0024   rays(ray_i).r = [-20 2-4*ray_i/20 0];
+0025   <span class="comment">%rays(ray_i).e = [cos(fi_of_i) 0 sin(fi_of_i)];</span>
+0026   rays(ray_i).e = [1 0 0];
+0027   rays(ray_i).color = clrs(abs(ray_i-10)+1,:); <span class="comment">% color is line color for</span>
+0028                                    <span class="comment">% plotting of rays</span>
+0029   
+0030 <span class="keyword">end</span>
+0031 
+0032 <span class="comment">% build the optical system as specified in opt.exmpl</span>
+0033 <span class="comment">%opt_el = opt_build('opt.6.exmpl');</span>
+0034 opt_el = <a href="opt_build.html" class="code" title="function opt_elems = opt_build(file)">opt_build</a>(<span class="string">'opt.sca.exmpl'</span>);
+0035 
+0036 r1 = fliplr(1./[-1/12:1/24-eps:1/12]);
+0037 
+0038 ng = <a href="opt_refrindx.html" class="code" title="function n = opt_refrindx(glass,wavelength)">opt_refrindx</a>(opt_el(2).glass,ray.wavelength);
+0039 f = <a href="opt_f_of_r1nr2zc.html" class="code" title="function f = opt_f_of_r1nr2zc(r1,n,r2,zc)">opt_f_of_r1nr2zc</a>(opt_el(2).r_o_curv,<span class="keyword">...</span>
+0040                      ng,<span class="keyword">...</span>
+0041                      opt_el(3).r_o_curv,<span class="keyword">...</span>
+0042                      norm(opt_el(3).r-opt_el(2).r));
+0043 
+0044 <span class="keyword">for</span> ii = 1:length(r1),
+0045   
+0046   r2 = <a href="opt_r2_of_fnr1_thick.html" class="code" title="function r2 = opt_r2_of_fnr1_thick(f,n,r1,zc)">opt_r2_of_fnr1_thick</a>(f,ng,r1(ii),norm(opt_el(3).r-opt_el(2).r));
+0047   
+0048   opt_el(3).r_o_curv = -r1(ii);
+0049   opt_el(2).r_o_curv = -r2;
+0050   F(ii) = <a href="opt_f_of_r1nr2zc.html" class="code" title="function f = opt_f_of_r1nr2zc(r1,n,r2,zc)">opt_f_of_r1nr2zc</a>(opt_el(2).r_o_curv,<span class="keyword">...</span>
+0051                           ng,<span class="keyword">...</span>
+0052                           opt_el(3).r_o_curv,<span class="keyword">...</span>
+0053                           norm(opt_el(3).r-opt_el(2).r));
+0054 
+0055   vini = <a href="opt_vini.html" class="code" title="function vini = opt_vini(r1,r2,ng,zc)">opt_vini</a>(opt_el(2).r_o_curv,opt_el(3).r_o_curv,ng,norm(opt_el(3).r-opt_el(2).r));
+0056   opt_el(end).r = opt_el(3).r - vini*opt_el(3).n + F(ii)*opt_el(3).n;
+0057   disp(opt_el(end).r)
+0058   r = [-150 0 0];
+0059   dr = [0 0 0;0 0 16];
+0060   
+0061   <span class="keyword">for</span> jj = 1:2,
+0062     
+0063     opt_el(end).img = 0*opt_el(end).img;
+0064     
+0065     r = r+dr(jj,:);
+0066     e = -r/norm(r);
+0067     
+0068     <span class="comment">%%%subplot(5,4,1+4*(ii-1)+2*(jj-1))</span>
+0069     subplot(5,4,1+4*(ii-1)+1*(jj-1))
+0070     opt_el = <a href="opt_project_direction.html" class="code" title="function opt_el = opt_project_direction(e,I,wavelengths,opt_el,opt_ops)">opt_project_direction</a>(e,100,ray.wavelength,opt_el,opt_ops);
+0071     <a href="opt_plotoptics.html" class="code" title="function Hs = opt_plotoptics(opt_el,plotmode)">opt_plotoptics</a>(opt_el,-2);
+0072     <span class="keyword">if</span> jj == 1
+0073       axis([-.5 .5 -2 2 -2 2])
+0074       hold on
+0075       <a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">opt_trace</a>(opt_el,rays,opt_ops2);
+0076       view(0,90)
+0077       zlnr(1) = round(100*opt_el(2).r_o_curv)/100;
+0078       zlnr(2) = round(100*opt_el(3).r_o_curv)/100;
+0079       ylabel([<span class="string">'r = ['</span>,num2str(zlnr(1),<span class="string">'%5g'</span>),<span class="string">', '</span>,num2str(zlnr(2),<span class="string">'%5g'</span>),<span class="string">']'</span>],<span class="string">'fontsize'</span>,10)
+0080       <span class="keyword">if</span> ii == 1
+0081         title(<span class="string">'Lens shape'</span>,<span class="string">'fontsize'</span>,16,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>)
+0082       <span class="keyword">end</span>
+0083     <span class="keyword">else</span>
+0084       hold on
+0085       <a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">opt_trace</a>(opt_el,rays,opt_ops2);
+0086       view(0,90)
+0087       set(gca,<span class="string">'zticklabel'</span>,<span class="string">''</span>)
+0088       axis([11 12 -.1 .1 -.1 .1])
+0089       <span class="keyword">if</span> ii == 1
+0090         title(<span class="string">'Rays in focal plane'</span>,<span class="string">'fontsize'</span>,16,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>)
+0091       <span class="keyword">end</span>
+0092     <span class="keyword">end</span>
+0093     
+0094     <span class="keyword">if</span> ii &lt; 5
+0095       set(gca,<span class="string">'xticklabel'</span>,<span class="string">''</span>)
+0096     <span class="keyword">end</span>
+0097     <span class="comment">%%%subplot(5,4,2+4*(ii-1)+2*(jj-1))</span>
+0098     subplot(5,4,3+4*(ii-1)+1*(jj-1))
+0099     <span class="keyword">if</span> jj == 1
+0100       xi = (257-9):(257+9);
+0101       yi = (257-9):(257+9);
+0102     <span class="keyword">else</span>
+0103       xi = (257-9):(257+9);
+0104       yi = 30:60;
+0105     <span class="keyword">end</span>
+0106     convK = [.25 .5 .25;.5 1 .5;.25 .5 .25];
+0107     convK = convK/sum(convK);
+0108     
+0109     imagesc(xi,yi,log(conv2(opt_el(end).img(yi,xi),convK,<span class="string">'same'</span>)))<span class="comment">%,my_cbar</span>
+0110     
+0111     <span class="keyword">if</span> jj == 1
+0112       sphcax(ii,:) = caxis;
+0113     <span class="keyword">else</span>
+0114       comacax(ii,:) = caxis;
+0115     <span class="keyword">end</span>
+0116     <span class="keyword">if</span> ii == 1
+0117       <span class="keyword">if</span> jj == 1
+0118         title(<span class="string">'Spherical A'</span>,<span class="string">'fontsize'</span>,16,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>)
+0119       <span class="keyword">else</span>
+0120         title(<span class="string">'Coma'</span>,<span class="string">'fontsize'</span>,16,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>)
+0121       <span class="keyword">end</span>
+0122     <span class="keyword">end</span>
+0123   <span class="keyword">end</span>
+0124   disp([<span class="string">'ii = '</span>,num2str(ii)])
+0125   drawnow
+0126   
+0127 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

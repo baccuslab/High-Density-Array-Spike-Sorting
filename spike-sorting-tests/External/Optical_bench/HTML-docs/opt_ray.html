@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of opt_ray</title>
+  <meta name="keywords" content="opt_ray">
+  <meta name="description" content="OPT_RAY - RAY creator for OPT_TOOLS">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>opt_ray
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>OPT_RAY - RAY creator for OPT_TOOLS</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function ray = opt_ray() </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> OPT_RAY - RAY creator for OPT_TOOLS
+ Creates a default ray structure  
+   
+ CAlling:
+ ray = opt_ray()
+ 
+ See also <a href="opt_refraction.html" class="code" title="function [en,refraction_loss,n_refr,phase_shift] = opt_refraction(r_int,ray,optelem)">OPT_REFRACTION</a>, <a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">OPT_TRACE</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_exempel.html" class="code" title="">opt_exempel</a>	Example showing the capabilities of Optical_bench:</li><li><a href="opt_exempel2.html" class="code" title="">opt_exempel2</a>	Example of</li><li><a href="opt_exempel3.html" class="code" title="">opt_exempel3</a>	Example of spherical aberation</li><li><a href="opt_exempel5.html" class="code" title="">opt_exempel5</a>	Example of Spherical abberation</li><li><a href="opt_exempel6.html" class="code" title="">opt_exempel6</a>	Example showing Spherical abberation and Coma.</li><li><a href="opt_exmpl_astigmatic.html" class="code" title="">opt_exmpl_astigmatic</a>	Example showing astigmatic aberration</li><li><a href="opt_exmpl_chromatic_ab.html" class="code" title="">opt_exmpl_chromatic_ab</a>	Example showing chromatic aberration</li><li><a href="opt_exmpl_coma.html" class="code" title="">opt_exmpl_coma</a>	Example showing coma (aberration)</li><li><a href="opt_exmpl_field_curv.html" class="code" title="">opt_exmpl_field_curv</a>	Example showing curvature of focus (aberration).</li><li><a href="opt_exmpl_sphere_coma.html" class="code" title="">opt_exmpl_sphere_coma</a>	Example showing spherical aberation and coma</li><li><a href="opt_pinhole1.html" class="code" title="">opt_pinhole1</a>	Example showing pin-hole optics.</li><li><a href="opt_project_direction.html" class="code" title="function opt_el = opt_project_direction(e,I,wavelengths,opt_el,opt_ops)">opt_project_direction</a>	OPT_PROJECT_POINT - Project light from direction E with intensity I throug OPT_EL</li><li><a href="opt_project_point.html" class="code" title="function opt_el = opt_project_point(r,I,wavelengths,opt_el,opt_ops)">opt_project_point</a>	OPT_PROJECT_POINT - Project light from point R with intensity I through optics OPT_EL</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function ray = opt_ray()</a>
+0002 <span class="comment">% OPT_RAY - RAY creator for OPT_TOOLS</span>
+0003 <span class="comment">% Creates a default ray structure</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% CAlling:</span>
+0006 <span class="comment">% ray = opt_ray()</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% See also OPT_REFRACTION, OPT_TRACE</span>
+0009 
+0010 <span class="comment">% Version: 1.0</span>
+0011 <span class="comment">% Copyright: Bjorn Gustavsson 20020430</span>
+0012 
+0013 
+0014 ray.r = [0 0 0];
+0015 ray.e = [1 0 0];
+0016 ray.n = 1;
+0017 ray.I = 1;
+0018 ray.wavelength = 5577e-10;
+0019 ray.color = [0 1 0];
+0020 ray.absorption = 0;
+0021 <span class="comment">%ray.glass = 'air'; ???</span></pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

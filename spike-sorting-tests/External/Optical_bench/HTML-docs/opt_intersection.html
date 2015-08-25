@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of opt_intersection</title>
+  <meta name="keywords" content="opt_intersection">
+  <meta name="description" content="OPT_INTERSECTION - Determine the impact point of an optical">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>opt_intersection
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>OPT_INTERSECTION - Determine the impact point of an optical</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function rinter = opt_intersection(optelem,rayin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> OPT_INTERSECTION - Determine the impact point of an optical
+ ray RAYIN on an lens system element OPTELEM
+   
+ Calling:
+ rinter = opt_intersection(optelem,rayin)
+ 
+ See also <a href="opt_refraction.html" class="code" title="function [en,refraction_loss,n_refr,phase_shift] = opt_refraction(r_int,ray,optelem)">OPT_REFRACTION</a>, <a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">OPT_TRACE</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="point_on_line.html" class="code" title="function  [r_out] = point_on_line(r_0,e_l,l);">point_on_line</a>	POINT_ON_LINE  - calculates the vector to a point</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">opt_trace</a>	OPT_TRACE - ray tracing through optical systems.</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [rinter,en] = sphereintersection(rl,e_in,rsf,curvature,lensradius,en)</a></li></ul>
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function rinter = opt_intersection(optelem,rayin)</a>
+0002 <span class="comment">% OPT_INTERSECTION - Determine the impact point of an optical</span>
+0003 <span class="comment">% ray RAYIN on an lens system element OPTELEM</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Calling:</span>
+0006 <span class="comment">% rinter = opt_intersection(optelem,rayin)</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% See also OPT_REFRACTION, OPT_TRACE</span>
+0009 
+0010 <span class="comment">% Version: 1.0</span>
+0011 <span class="comment">% Copyright: Bjorn Gustavsson 20020430</span>
+0012 
+0013 
+0014 <span class="keyword">if</span> ~isempty(optelem.r)
+0015   l = (optelem.r(1)-rayin.r(1))/rayin.e(1);
+0016   rinter = <a href="point_on_line.html" class="code" title="function  [r_out] = point_on_line(r_0,e_l,l);">point_on_line</a>(rayin.r,rayin.e,l);
+0017 <span class="keyword">end</span>
+0018 
+0019 <span class="keyword">switch</span> optelem.type
+0020  <span class="keyword">case</span> <span class="string">'aperture'</span>
+0021   <span class="comment">% intersection between a line and a plane</span>
+0022   rinter = rinter+ rayin.e*( ( dot(optelem.r,optelem.n) - dot(rinter,optelem.n) ) / dot(rayin.e,optelem.n) );
+0023   
+0024  <span class="keyword">case</span> <span class="string">'grid'</span>
+0025   
+0026   <span class="comment">% intersection between a line and a plane</span>
+0027   rinter = rinter+ rayin.e*( ( dot(optelem.r,optelem.n) - dot(rinter,optelem.n) ) / dot(rayin.e,optelem.n) );
+0028   
+0029  <span class="keyword">case</span> <span class="string">'lens'</span>
+0030   
+0031   <span class="comment">% intersection between a line and a sphere</span>
+0032   [rinter,en] = <a href="#_sub1" class="code" title="subfunction [rinter,en] = sphereintersection(rl,e_in,rsf,curvature,lensradius,en)">sphereintersection</a>(rinter,<span class="keyword">...</span>
+0033                    rayin.e,<span class="keyword">...</span>
+0034                    optelem.r+optelem.r_o_curv*optelem.n,<span class="keyword">...</span>
+0035                    optelem.r_o_curv,<span class="keyword">...</span>
+0036                    optelem.diameter/2,<span class="keyword">...</span>
+0037                    optelem.n);
+0038  
+0039  <span class="keyword">case</span> <span class="string">'prism'</span>
+0040   
+0041   <span class="comment">% intersection between a line and a plane</span>
+0042   rinter = rinter+ rayin.e*( ( dot(optelem.r,optelem.n) - dot(rinter,optelem.n) ) / dot(rayin.e,optelem.n) );
+0043   
+0044  <span class="keyword">case</span> <span class="string">'screen'</span>
+0045   
+0046   <span class="comment">% intersection between a line and a plane</span>
+0047   rinter = rinter+ rayin.e*( ( dot(optelem.r,optelem.n) - dot(rinter,optelem.n) ) / dot(rayin.e,optelem.n) );
+0048   
+0049  <span class="keyword">case</span> <span class="string">'slit'</span>
+0050   
+0051   <span class="comment">% intersection between a line and a plane</span>
+0052   rinter = rinter+ rayin.e*( ( dot(optelem.r,optelem.n) - dot(rinter,optelem.n) ) / dot(rayin.e,optelem.n) );
+0053   
+0054  <span class="keyword">otherwise</span>
+0055   
+0056   <span class="keyword">if</span> 1 &lt; exist(<span class="string">'fminu'</span>) &amp; exist(<span class="string">'fminu'</span>) &lt; 7
+0057     l_inter = fminu(optelem.fcn1,0,[],[],rayin.r,rayin.e,<span class="string">'s'</span>,optelem.arglist);
+0058   <span class="keyword">else</span>
+0059     l_inter = fminsearch(optelem.fcn1,0,[],[],rayin.r,rayin.e,<span class="string">'s'</span>,optelem.arglist);
+0060   <span class="keyword">end</span>
+0061   rinter = <a href="point_on_line.html" class="code" title="function  [r_out] = point_on_line(r_0,e_l,l);">point_on_line</a>(rayin.r,rayin.e,l_inter);
+0062   
+0063 <span class="keyword">end</span>
+0064 
+0065 
+0066 
+0067 <a name="_sub1" href="#_subfunctions" class="code">function [rinter,en] = sphereintersection(rl,e_in,rsf,curvature,lensradius,en)</a>
+0068 <span class="comment">% SPHEREINTERSECTION - intersection between a ray and a spherical</span>
+0069 <span class="comment">% lens surface</span>
+0070 <span class="comment">%</span>
+0071 
+0072 ex = e_in(1);
+0073 ey = e_in(2);
+0074 ez = e_in(3);
+0075 xl = rl(1);
+0076 yl = rl(2);
+0077 zl = rl(3);
+0078 x0 = rsf(1);
+0079 y0 = rsf(2);
+0080 z0 = rsf(3);
+0081 R = curvature;
+0082 
+0083 <span class="comment">% I'd like to say that I did this by myself...</span>
+0084 
+0085 l(2) = [ 1/2/(ex^2+ey^2+ez^2)*(2*ez*z0-2*zl*ez-2*yl*ey+2*ex*x0+2*ey*y0-2*xl*ex+2*(2*ex^2*zl*z0+2*ez*z0*ex*x0-ex^2*y0^2-ex^2*z0^2-ex^2*yl^2+ex^2*R^2-ex^2*zl^2-ey^2*xl^2-ey^2*z0^2-ey^2*x0^2+ey^2*R^2-ey^2*zl^2-ez^2*xl^2-ez^2*y0^2-ez^2*x0^2-ez^2*yl^2+ez^2*R^2+2*ex^2*yl*y0+2*ey^2*zl*z0+2*ey^2*xl*x0+2*ez^2*xl*x0+2*ez^2*yl*y0-2*ez*z0*yl*ey+2*ez*z0*ey*y0-2*ez*z0*xl*ex+2*zl*ez*yl*ey-2*zl*ez*ex*x0-2*zl*ez*ey*y0+2*zl*ez*xl*ex-2*yl*ey*ex*x0+2*yl*ey*xl*ex+2*ex*x0*ey*y0-2*ey*y0*xl*ex)^(1/2))];
+0086 
+0087 <span class="comment">% ...But who am I trying to fool</span>
+0088 
+0089 l(1) = [ 1/2/(ex^2+ey^2+ez^2)*(2*ez*z0-2*zl*ez-2*yl*ey+2*ex*x0+2*ey*y0-2*xl*ex-2*(2*ex^2*zl*z0+2*ez*z0*ex*x0-ex^2*y0^2-ex^2*z0^2-ex^2*yl^2+ex^2*R^2-ex^2*zl^2-ey^2*xl^2-ey^2*z0^2-ey^2*x0^2+ey^2*R^2-ey^2*zl^2-ez^2*xl^2-ez^2*y0^2-ez^2*x0^2-ez^2*yl^2+ez^2*R^2+2*ex^2*yl*y0+2*ey^2*zl*z0+2*ey^2*xl*x0+2*ez^2*xl*x0+2*ez^2*yl*y0-2*ez*z0*yl*ey+2*ez*z0*ey*y0-2*ez*z0*xl*ex+2*zl*ez*yl*ey-2*zl*ez*ex*x0-2*zl*ez*ey*y0+2*zl*ez*xl*ex-2*yl*ey*ex*x0+2*yl*ey*xl*ex+2*ex*x0*ey*y0-2*ey*y0*xl*ex)^(1/2))];
+0090 
+0091 <span class="comment">% Where would I be without the symbolic toolbox?</span>
+0092 
+0093 [qwe,ii] = min(abs(l));
+0094 l = l(ii);
+0095 
+0096 rinter = <a href="point_on_line.html" class="code" title="function  [r_out] = point_on_line(r_0,e_l,l);">point_on_line</a>(rl,e_in,l);
+0097 
+0098 r1 = rinter - rsf;
+0099 r2 = cross(r1,en);
+0100 
+0101 en = [];
+0102 <span class="keyword">if</span> norm(r2)&lt;lensradius
+0103   en = r1/norm(r1);
+0104 <span class="keyword">else</span>
+0105   rinter = [];
+0106 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

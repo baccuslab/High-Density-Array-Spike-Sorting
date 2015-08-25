@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of opt_exmpl_field_curv</title>
+  <meta name="keywords" content="opt_exmpl_field_curv">
+  <meta name="description" content="Example showing curvature of focus (aberration).">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html . -->
+<h1>opt_exmpl_field_curv
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Example showing curvature of focus (aberration).</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Example showing curvature of focus (aberration).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="opt_build.html" class="code" title="function opt_elems = opt_build(file)">opt_build</a>	OPT_BUILD - Builds optical system specified in FILE</li><li><a href="opt_f_of_r1nr2zc.html" class="code" title="function f = opt_f_of_r1nr2zc(r1,n,r2,zc)">opt_f_of_r1nr2zc</a>	OPT_R2_OF_FNR1_THICK - second radii of curvature given F, N R1 and ZC, thick lens</li><li><a href="opt_plotoptics.html" class="code" title="function Hs = opt_plotoptics(opt_el,plotmode)">opt_plotoptics</a>	OPT_PLOTOPTICS - Plot the optical system.</li><li><a href="opt_r2_of_fnr1_thick.html" class="code" title="function r2 = opt_r2_of_fnr1_thick(f,n,r1,zc)">opt_r2_of_fnr1_thick</a>	r2 = opt_r2_of_fnr1_thick(f,n,r1,zc)</li><li><a href="opt_ray.html" class="code" title="function ray = opt_ray()">opt_ray</a>	OPT_RAY - RAY creator for OPT_TOOLS</li><li><a href="opt_refrindx.html" class="code" title="function n = opt_refrindx(glass,wavelength)">opt_refrindx</a>	OPT_REFRINDX refractive index calculations.</li><li><a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">opt_trace</a>	OPT_TRACE - ray tracing through optical systems.</li><li><a href="opt_vini.html" class="code" title="function vini = opt_vini(r1,r2,ng,zc)">opt_vini</a>	OPT_VINI - Rear nodal point distance from rear vertex of thick lens</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Example showing curvature of focus (aberration).</span>
+0002 
+0003 <span class="comment">% Set the options for ploting of the optics/raytracing</span>
+0004 opt_ops.plotrays=1; <span class="comment">% plot the individual rays</span>
+0005 opt_ops.plotpaus=0; <span class="comment">% do not pause after each  ray intersection</span>
+0006 opt_ops.plotRT = 0; <span class="comment">% do not ``drawnow'' after each ray intersection</span>
+0007 
+0008 <span class="comment">% build the optical system as specified in opt.exmpl</span>
+0009 opt_el = <a href="opt_build.html" class="code" title="function opt_elems = opt_build(file)">opt_build</a>(<span class="string">'opt.6.exmpl'</span>);
+0010 
+0011 
+0012 ray = <a href="opt_ray.html" class="code" title="function ray = opt_ray()">opt_ray</a>;
+0013 
+0014 nr_rays = 3;
+0015 
+0016 <span class="keyword">for</span> ray_i = 1:nr_rays,
+0017   
+0018   rays(ray_i) = ray;
+0019   rays(ray_i).r = opt_el(1).r+.1*(ray_i-2)*[0 1 0];
+0020   <span class="comment">%rays(ray_i).e = [cos(fi_of_i) 0 sin(fi_of_i)];</span>
+0021   rays(ray_i).e = [1 0 0];
+0022   rays(ray_i).color = [0 0 1];<span class="comment">% blue - color is line color for</span>
+0023                               <span class="comment">% plotting of rays</span>
+0024   
+0025 <span class="keyword">end</span>
+0026 
+0027 
+0028 r1 = fliplr(1./[-1/6:1/12-eps:1/6]);
+0029 r1 = r1(3);
+0030 
+0031 ng = <a href="opt_refrindx.html" class="code" title="function n = opt_refrindx(glass,wavelength)">opt_refrindx</a>(opt_el(2).glass,ray.wavelength);
+0032 f = <a href="opt_f_of_r1nr2zc.html" class="code" title="function f = opt_f_of_r1nr2zc(r1,n,r2,zc)">opt_f_of_r1nr2zc</a>(opt_el(2).r_o_curv,<span class="keyword">...</span>
+0033                      ng,<span class="keyword">...</span>
+0034                      opt_el(3).r_o_curv,<span class="keyword">...</span>
+0035                      norm(opt_el(3).r-opt_el(2).r));
+0036 
+0037 <span class="keyword">for</span> ii = 1:length(r1),
+0038   
+0039   r2 = <a href="opt_r2_of_fnr1_thick.html" class="code" title="function r2 = opt_r2_of_fnr1_thick(f,n,r1,zc)">opt_r2_of_fnr1_thick</a>(f,ng,r1(ii),norm(opt_el(3).r-opt_el(2).r));
+0040   
+0041   opt_el(3).r_o_curv = -r1(ii);
+0042   opt_el(2).r_o_curv = -r2;
+0043   F(ii) = <a href="opt_f_of_r1nr2zc.html" class="code" title="function f = opt_f_of_r1nr2zc(r1,n,r2,zc)">opt_f_of_r1nr2zc</a>(opt_el(2).r_o_curv,<span class="keyword">...</span>
+0044                           ng,<span class="keyword">...</span>
+0045                           opt_el(3).r_o_curv,<span class="keyword">...</span>
+0046                           norm(opt_el(3).r-opt_el(2).r));
+0047 
+0048   vini = <a href="opt_vini.html" class="code" title="function vini = opt_vini(r1,r2,ng,zc)">opt_vini</a>(opt_el(2).r_o_curv,opt_el(3).r_o_curv,ng,norm(opt_el(3).r-opt_el(2).r));
+0049   opt_el(end).r = opt_el(3).r - vini*opt_el(3).n + F(ii)*opt_el(3).n;
+0050   
+0051   r = [-150 3 0];
+0052   dr = [0 -3 0];
+0053   
+0054   <span class="keyword">for</span> j = 1:5,
+0055     
+0056     opt_el(end).img = 0*opt_el(end).img;
+0057     
+0058     r = r+dr;
+0059     e = -r/norm(r);
+0060     <span class="keyword">for</span> ray_i = 1:nr_rays,
+0061       
+0062       rays(ray_i).e = e;
+0063       
+0064     <span class="keyword">end</span>
+0065     
+0066     <a href="opt_plotoptics.html" class="code" title="function Hs = opt_plotoptics(opt_el,plotmode)">opt_plotoptics</a>(opt_el,2);
+0067     hold on
+0068     <a href="opt_trace.html" class="code" title="function [optelements] = opt_trace(optelements,rays,opt_ops)">opt_trace</a>(opt_el,rays,opt_ops);
+0069     
+0070   <span class="keyword">end</span>
+0071   
+0072 <span class="keyword">end</span>
+0073 pause(2)
+0074 plot([11 12 12 11 11],[-0.2 -0.2 1.1 1.1 -0.2])
+0075 disp(<span class="string">'push any key'</span>)
+0076 pause
+0077 axis([10.9 12.1 -0.25 1.15])</pre></div>
+<hr><address>Generated on Thu 29-Apr-2010 14:16:49 by <strong>B.&nbsp;Gustavsson</strong> with <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>
