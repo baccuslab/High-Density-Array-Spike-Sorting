@@ -13,9 +13,8 @@ The matrix you will get as an output are the sorting errors. As one can see, som
 
 ## Description of spike-sorting-code
 
-In the folder, spike-sorting-code, are the scripts used to sort the high density data. It uses the sorter used in spike-sorting-tests, 
-however, to sort individual electrode groups and then merges, in a second step, all the individual electrode group sortings into one final 
-consistent sorting. As a disclaimer, it is a bit difficult to use now, however, because the most recent incarnation of it relies on Felix's group's 
+In the folder, spike-sorting-code, are the scripts used to sort the high density data. It uses the sorter used in spike-sorting-tests to sort individual electrode groups; additionally, it then merges, in a second step, all the individual electrode group sortings into one final 
+consistent sorting. As a disclaimer, it is a bit difficult to use now because the most recent incarnation of it relies on Felix's group's 
 computation grid.
 
 To start the sorting, Felix uses for each person (different ways of organizing their data) a different script. These scripts are in 
